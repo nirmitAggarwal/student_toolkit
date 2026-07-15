@@ -3,9 +3,7 @@ import { useState } from 'react';
 function UnitConverterPage() {
   const [activeTab, setActiveTab] = useState('length');
   const [value, setValue] = useState('');
-  const [fromUnit, setFromUnit] = useState('m');
-  const [toUnit, setToUnit] = useState('cm');
-
+  
   const converters = {
     length: {
       label: 'Length',
@@ -14,6 +12,10 @@ function UnitConverterPage() {
     weight: {
       label: 'Weight',
       units: { 'kg': 1, 'g': 0.001, 'mg': 0.000001, 'lb': 0.453592, 'oz': 0.0283495 },
+    },
+    data: {
+      label: 'Data Size',
+      units: { 'B': 1, 'KB': 1024, 'MB': 1048576, 'GB': 1073741824, 'TB': 1099511627776 },
     },
     temperature: {
       label: 'Temperature',
@@ -24,6 +26,10 @@ function UnitConverterPage() {
       units: { 'L': 1, 'mL': 0.001, 'GAL': 3.78541, 'pint': 0.473176 },
     },
   };
+
+  const initialUnits = Object.keys(converters[activeTab].units);
+  const [fromUnit, setFromUnit] = useState(initialUnits[0]);
+  const [toUnit, setToUnit] = useState(initialUnits[1] || initialUnits[0]);
 
   const getConversions = () => {
     const converter = converters[activeTab];
@@ -48,8 +54,8 @@ function UnitConverterPage() {
       const units = Object.keys(converter.units);
       units.forEach((unit) => {
         // Convert to base unit first, then to target unit
-        const metersBase = baseValue * converter.units[fromUnit];
-        conversions[unit] = metersBase / converter.units[unit];
+        const baseUnitValue = baseValue * converter.units[fromUnit];
+        conversions[unit] = baseUnitValue / converter.units[unit];
       });
     }
 
@@ -57,47 +63,58 @@ function UnitConverterPage() {
   };
 
   const conversions = getConversions();
-
   const converter = converters[activeTab];
   const unitKeys = Object.keys(converter.units);
 
   return (
-    <section className="space-y-8">
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-semibold text-slate-900">Unit Converter</h1>
-        <p className="mt-2 text-slate-600">Convert between various units of measurement</p>
+    <section className="space-y-8 text-slate-800 dark:text-slate-100">
+      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm">
+        <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Unit Converter</h1>
+        <p className="mt-2 text-slate-600 dark:text-slate-400">Convert between various units of measurement (Length, Weight, Data, Temp, Volume)</p>
       </div>
 
-      <div className="max-w-3xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-        <div className="flex gap-2 border-b border-slate-200 mb-6 flex-wrap">
-          {Object.entries(converters).map(([key, conv]) => (
-            <button
-              key={key}
-              onClick={() => { setActiveTab(key); setValue(''); setFromUnit(unitKeys[0]); setToUnit(unitKeys[1] || unitKeys[0]); }}
-              className={`px-4 py-2 font-semibold border-b-2 -mb-px transition ${
-                activeTab === key ? 'border-primary text-primary' : 'border-transparent text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              {conv.label}
-            </button>
-          ))}
+      <div className="max-w-3xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+        {/* Tab Selection */}
+        <div className="flex gap-1 border-b border-slate-100 dark:border-slate-800 mb-6 flex-wrap">
+          {Object.entries(converters).map(([key, conv]) => {
+            const nextKeys = Object.keys(conv.units);
+            return (
+              <button
+                key={key}
+                onClick={() => {
+                  setActiveTab(key);
+                  setValue('');
+                  setFromUnit(nextKeys[0]);
+                  setToUnit(nextKeys[1] || nextKeys[0]);
+                }}
+                className={`px-5 py-3 font-semibold border-b-2 -mb-px transition ${
+                  activeTab === key
+                    ? 'border-primary text-primary font-bold'
+                    : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
+                }`}
+              >
+                {conv.label}
+              </button>
+            );
+          })}
         </div>
 
+        {/* Conversion Inputs */}
         <div className="grid gap-4 sm:grid-cols-2 mb-6">
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">From</label>
+            <label className="block text-sm font-semibold text-slate-750 dark:text-slate-300 mb-2">From</label>
             <div className="flex gap-2">
               <input
                 type="number"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="Enter value"
-                className="flex-1 rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-primary"
+                className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
               />
               <select
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
-                className="rounded-2xl border border-slate-200 px-3 py-3 outline-none focus:border-primary"
+                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-3 py-3 outline-none focus:border-primary transition"
               >
                 {unitKeys.map((unit) => (
                   <option key={unit} value={unit}>{unit}</option>
@@ -107,11 +124,11 @@ function UnitConverterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-2">To</label>
+            <label className="block text-sm font-semibold text-slate-750 dark:text-slate-300 mb-2">To</label>
             <select
               value={toUnit}
               onChange={(e) => setToUnit(e.target.value)}
-              className="w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-primary"
+              className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
             >
               {unitKeys.map((unit) => (
                 <option key={unit} value={unit}>{unit}</option>
@@ -120,18 +137,27 @@ function UnitConverterPage() {
           </div>
         </div>
 
-        <div className="rounded-2xl bg-gradient-to-br from-primary to-secondary p-6 text-white text-center">
+        {/* Display Conversion Result */}
+        <div className="rounded-2xl bg-gradient-to-br from-primary to-secondary p-6 text-white text-center shadow-md">
           <p className="text-sm opacity-80">{value || '0'} {fromUnit} = </p>
           <p className="mt-2 text-3xl font-bold">{conversions[toUnit]?.toFixed(4) || '0'} {toUnit}</p>
         </div>
 
-        <div className="mt-6">
-          <h3 className="font-semibold text-slate-900 mb-3">All Conversions</h3>
-          <div className="grid gap-2 grid-cols-2 sm:grid-cols-3">
+        {/* Side-by-side all other conversions */}
+        <div className="mt-8 border-t border-slate-100 dark:border-slate-800 pt-6">
+          <h3 className="font-semibold text-slate-900 dark:text-white mb-4">All Conversions (Reference)</h3>
+          <div className="grid gap-3 grid-cols-2 sm:grid-cols-3">
             {unitKeys.map((unit) => (
-              <div key={unit} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                <p className="text-xs text-slate-500">{unit}</p>
-                <p className="mt-1 font-bold text-slate-900">{conversions[unit]?.toFixed(4) || '0'}</p>
+              <div
+                key={unit}
+                className="rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/40 p-4"
+              >
+                <p className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">{unit}</p>
+                <p className="mt-1.5 font-mono font-bold text-slate-850 dark:text-slate-200 text-lg">
+                  {conversions[unit] >= 1000000 || (conversions[unit] > 0 && conversions[unit] < 0.0001)
+                    ? conversions[unit].toExponential(4)
+                    : conversions[unit]?.toFixed(4) || '0'}
+                </p>
               </div>
             ))}
           </div>

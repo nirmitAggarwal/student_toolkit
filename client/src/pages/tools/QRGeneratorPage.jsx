@@ -1,16 +1,59 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { FiDownload, FiCopy } from 'react-icons/fi';
+import { FiDownload, FiCopy, FiLink, FiFileText, FiWifi, FiMail, FiPhone } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 function QRGeneratorPage() {
   const [qrType, setQrType] = useState('url');
-  const [qrValue, setQrValue] = useState('https://studenttoolkit.example.com');
+  
+  // Dynamic fields state
+  const [url, setUrl] = useState('https://studenttoolkit.example.com');
+  const [text, setText] = useState('Hello World');
+  const [wifi, setWifi] = useState({ ssid: '', password: '', security: 'WPA' });
+  const [email, setEmail] = useState({ to: '', subject: '', body: '' });
+  const [phone, setPhone] = useState('');
+
+  const [qrValue, setQrValue] = useState('');
+
+  // Dynamically compile the QR value based on selected type and inputs
+  useEffect(() => {
+    switch (qrType) {
+      case 'url':
+        setQrValue(url || 'https://studenttoolkit.example.com');
+        break;
+      case 'text':
+        setQrValue(text || 'Hello World');
+        break;
+      case 'wifi':
+        if (!wifi.ssid) {
+          setQrValue('WIFI:S:ExampleNetwork;T:WPA;P:password;;');
+        } else {
+          setQrValue(`WIFI:S:${wifi.ssid};T:${wifi.security};P:${wifi.password};;`);
+        }
+        break;
+      case 'email':
+        if (!email.to) {
+          setQrValue('mailto:support@example.com');
+        } else {
+          const subjectParam = email.subject ? `?subject=${encodeURIComponent(email.subject)}` : '';
+          const bodyParam = email.body ? `${subjectParam ? '&' : '?' }body=${encodeURIComponent(email.body)}` : '';
+          setQrValue(`mailto:${email.to}${subjectParam}${bodyParam}`);
+        }
+        break;
+      case 'phone':
+        setQrValue(phone ? `tel:${phone}` : 'tel:1234567890');
+        break;
+      default:
+        setQrValue('');
+    }
+  }, [qrType, url, text, wifi, email, phone]);
 
   const downloadQR = (format) => {
-    const qrElement = document.querySelector('svg');
+    const container = document.getElementById('qr-code-svg-container');
+    const qrElement = container ? container.querySelector('svg') : null;
+
     if (!qrElement) {
-      toast.error('QR code not found');
+      toast.error('QR code element not found');
       return;
     }
     
@@ -20,7 +63,7 @@ function QRGeneratorPage() {
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'qrcode.svg';
+      link.download = `qrcode_${qrType}.svg`;
       link.click();
       URL.revokeObjectURL(url);
     } else {
@@ -31,15 +74,27 @@ function QRGeneratorPage() {
       const svgString = new XMLSerializer().serializeToString(qrElement);
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       const url = URL.createObjectURL(blob);
+      
       img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
+        // Give padding to canvas
+        const padding = 20;
+        canvas.width = img.width + padding * 2;
+        canvas.height = img.height + padding * 2;
+        
+        // Background color
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.drawImage(img, padding, padding);
         canvas.toBlob((blob) => {
+          if (!blob) {
+            toast.error('Failed to generate PNG image');
+            return;
+          }
           const url = URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'qrcode.png';
+          link.download = `qrcode_${qrType}.png`;
           link.click();
           URL.revokeObjectURL(url);
         }, 'image/png');
@@ -52,68 +107,213 @@ function QRGeneratorPage() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(qrValue);
-    toast.success('Copied to clipboard');
+    toast.success('Formatted code value copied to clipboard!');
   };
 
   return (
-    <section className="space-y-8">
-      <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-8 shadow-sm">
+    <section className="space-y-8 text-slate-800 dark:text-slate-100">
+      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm">
         <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">QR Code Generator</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-400">Generate QR codes for links, text, WiFi, and more</p>
+        <p className="mt-2 text-slate-600 dark:text-slate-400">Generate high-quality custom QR codes dynamically for various applications</p>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr]">
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm space-y-4">
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">QR Code Type</label>
-            <select
-              value={qrType}
-              onChange={(e) => setQrType(e.target.value)}
-              className="w-full rounded-2xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white px-4 py-2 outline-none focus:border-primary"
+      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+        {/* Dynamic Inputs Form */}
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col justify-between space-y-6">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">QR Code Type</label>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-slate-50 dark:bg-slate-950 p-1.5 rounded-2xl">
+                {[
+                  { id: 'url', label: 'Link', icon: FiLink },
+                  { id: 'text', label: 'Text', icon: FiFileText },
+                  { id: 'wifi', label: 'WiFi', icon: FiWifi },
+                  { id: 'email', label: 'Email', icon: FiMail },
+                  { id: 'phone', label: 'Phone', icon: FiPhone },
+                ].map((type) => {
+                  const Icon = type.icon;
+                  return (
+                    <button
+                      key={type.id}
+                      onClick={() => setQrType(type.id)}
+                      className={`flex flex-col sm:flex-row items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl text-xs font-semibold transition ${
+                        qrType === type.id
+                          ? 'bg-white dark:bg-slate-800 text-primary shadow-sm border border-slate-100 dark:border-slate-700/50'
+                          : 'text-slate-500 hover:text-slate-800 dark:hover:text-white'
+                      }`}
+                    >
+                      <Icon className="h-4 w-4" />
+                      {type.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Render Form based on QR type */}
+            <div className="pt-2">
+              {qrType === 'url' && (
+                <div className="space-y-1">
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Website URL</label>
+                  <input
+                    type="url"
+                    value={url}
+                    onChange={(e) => setUrl(e.target.value)}
+                    placeholder="https://example.com"
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                  />
+                </div>
+              )}
+
+              {qrType === 'text' && (
+                <div className="space-y-1">
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Plain Text</label>
+                  <textarea
+                    value={text}
+                    onChange={(e) => setText(e.target.value)}
+                    placeholder="Type or paste your text here..."
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition font-mono text-sm"
+                    rows="4"
+                  />
+                </div>
+              )}
+
+              {qrType === 'wifi' && (
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Network SSID (Name)</label>
+                    <input
+                      type="text"
+                      value={wifi.ssid}
+                      onChange={(e) => setWifi({ ...wifi, ssid: e.target.value })}
+                      placeholder="My Home WiFi"
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                    />
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="space-y-1">
+                      <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Password</label>
+                      <input
+                        type="password"
+                        value={wifi.password}
+                        onChange={(e) => setWifi({ ...wifi, password: e.target.value })}
+                        placeholder="••••••••"
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Security Type</label>
+                      <select
+                        value={wifi.security}
+                        onChange={(e) => setWifi({ ...wifi, security: e.target.value })}
+                        className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                      >
+                        <option value="WPA">WPA/WPA2</option>
+                        <option value="WEP">WEP</option>
+                        <option value="nopass">None (Open)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {qrType === 'email' && (
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Recipient Email</label>
+                    <input
+                      type="email"
+                      value={email.to}
+                      onChange={(e) => setEmail({ ...email, to: e.target.value })}
+                      placeholder="hello@example.com"
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Subject</label>
+                    <input
+                      type="text"
+                      value={email.subject}
+                      onChange={(e) => setEmail({ ...email, subject: e.target.value })}
+                      placeholder="Feedback"
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Message Body</label>
+                    <textarea
+                      value={email.body}
+                      onChange={(e) => setEmail({ ...email, body: e.target.value })}
+                      placeholder="Write message contents here..."
+                      className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                      rows="3"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {qrType === 'phone' && (
+                <div className="space-y-1">
+                  <label className="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Phone Number</label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+91 98765 43210"
+                    className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div className="space-y-1">
+              <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block">Raw Encoded Value</span>
+              <p className="text-xs font-mono text-slate-500 dark:text-slate-400 break-all bg-slate-50 dark:bg-slate-950 px-3 py-2.5 rounded-xl border border-slate-100 dark:border-slate-800">
+                {qrValue}
+              </p>
+            </div>
+            <button
+              onClick={copyToClipboard}
+              className="flex items-center justify-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 px-4 py-3.5 font-semibold text-slate-700 dark:text-slate-200 w-full transition active:scale-95"
             >
-              <option value="url">URL</option>
-              <option value="text">Text</option>
-              <option value="wifi">WiFi</option>
-              <option value="email">Email</option>
-              <option value="phone">Phone</option>
-            </select>
+              <FiCopy className="h-4.5 w-4.5" />
+              Copy Encoded Value
+            </button>
           </div>
-
-          <div>
-            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">Value</label>
-            <textarea
-              value={qrValue}
-              onChange={(e) => setQrValue(e.target.value)}
-              className="w-full rounded-2xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 dark:text-white px-4 py-2 outline-none focus:border-primary font-mono text-sm"
-              rows="4"
-            />
-          </div>
-
-          <button
-            onClick={copyToClipboard}
-            className="flex items-center justify-center gap-2 rounded-full bg-secondary hover:bg-primary px-4 py-2 font-semibold text-white w-full transition"
-          >
-            <FiCopy className="h-4 w-4" />
-            Copy Value
-          </button>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm flex flex-col items-center justify-center space-y-6">
-          <div className="rounded-3xl border-4 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-4">
-            <QRCodeSVG value={qrValue} size={280} level="H" includeMargin={true} />
+        {/* QR Preview & Download */}
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col items-center justify-center space-y-6">
+          <div className="text-center">
+            <span className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider block mb-2">QR Code Preview</span>
+            <div
+              id="qr-code-svg-container"
+              className="rounded-3xl border-4 border-slate-100 dark:border-slate-800 bg-white p-6 shadow-md transition"
+            >
+              <QRCodeSVG
+                value={qrValue}
+                size={220}
+                level="H"
+                includeMargin={false}
+                fgColor="#0f172a" // Custom dark Slate color for optimal scanning contrast
+                bgColor="#ffffff"
+              />
+            </div>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex gap-3 w-full max-w-[280px]">
             <button
               onClick={() => downloadQR('png')}
-              className="flex items-center gap-2 rounded-full bg-primary hover:bg-secondary px-4 py-2 font-semibold text-white transition"
+              className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-secondary active:scale-95 py-3.5 font-semibold text-white transition shadow-lg shadow-primary/20"
             >
               <FiDownload className="h-4 w-4" />
               PNG
             </button>
             <button
               onClick={() => downloadQR('svg')}
-              className="flex items-center gap-2 rounded-full bg-accent hover:bg-secondary px-4 py-2 font-semibold text-white transition"
+              className="flex-1 flex items-center justify-center gap-2 rounded-2xl bg-accent hover:bg-secondary active:scale-95 py-3.5 font-semibold text-white transition shadow-lg shadow-accent/20"
             >
               <FiDownload className="h-4 w-4" />
               SVG
