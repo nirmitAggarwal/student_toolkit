@@ -4,22 +4,29 @@ import { useAuthStore } from '../../store/useAuthStore';
 
 const tools = [
   { label: 'Dashboard', path: '/dashboard', icon: FiHome },
-  { group: 'Academic', items: [
-    { label: 'CGPA Calculator', path: '/tools/cgpa', icon: FiBookOpen },
-    { label: 'SGPA Calculator', path: '/tools/sgpa', icon: FiBookOpen },
-    { label: 'Percentage Calc', path: '/tools/percentage', icon: FiPercent },
-  ]},
-  { group: 'Productivity', items: [
-    { label: 'Attendance Tracker', path: '/tools/attendance', icon: FiCheckCircle },
-    { label: 'Time Table', path: '/tools/timetable', icon: FiCalendar },
-  ]},
-  { group: 'Utilities', items: [
-    { label: 'PDF Merger', path: '/tools/pdf', icon: FiFileText },
-    { label: 'Image Compressor', path: '/tools/image', icon: FiImage },
-    { label: 'QR Generator', path: '/tools/qr-gen', icon: FiCode },
-    { label: 'QR Scanner', path: '/tools/qr-scan', icon: FiCode },
-    { label: 'Unit Converter', path: '/tools/converter', icon: FiFilter },
-  ]},
+  {
+    group: 'Academic', items: [
+      { label: 'CGPA Calculator', path: '/tools/cgpa', icon: FiBookOpen },
+      { label: 'SGPA Calculator', path: '/tools/sgpa', icon: FiBookOpen },
+      { label: 'Percentage Calc', path: '/tools/percentage', icon: FiPercent },
+    ]
+  },
+  {
+    group: 'Productivity', items: [
+      { label: 'Attendance Tracker', path: '/tools/attendance', icon: FiCheckCircle },
+      { label: 'Time Table', path: '/tools/timetable', icon: FiCalendar },
+      { label: 'Calendar', path: '/calendar', icon: FiCalendar },
+    ]
+  },
+  {
+    group: 'Utilities', items: [
+      { label: 'PDF Merger', path: '/tools/pdf', icon: FiFileText },
+      { label: 'Image Compressor', path: '/tools/image', icon: FiImage },
+      { label: 'QR Generator', path: '/tools/qr-gen', icon: FiCode },
+      { label: 'QR Scanner', path: '/tools/qr-scan', icon: FiCode },
+      { label: 'Unit Converter', path: '/tools/converter', icon: FiFilter },
+    ]
+  },
 ];
 
 function Sidebar() {
@@ -46,8 +53,7 @@ function Sidebar() {
                         key={subitem.path}
                         to={subitem.path}
                         className={({ isActive }) =>
-                          `flex items-center gap-3 rounded-2xl px-4 py-2 text-sm font-medium transition ${
-                            isActive ? 'bg-primary text-white shadow-glow' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                          `flex items-center gap-3 rounded-2xl px-4 py-2 text-sm font-medium transition ${isActive ? 'bg-primary text-white shadow-glow' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                           }`
                         }
                       >
@@ -66,8 +72,7 @@ function Sidebar() {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${
-                    isActive ? 'bg-primary text-white shadow-glow' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+                  `flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition ${isActive ? 'bg-primary text-white shadow-glow' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
                   }`
                 }
               >
@@ -83,8 +88,7 @@ function Sidebar() {
         <NavLink
           to="/settings"
           className={({ isActive }) =>
-            `flex items-center gap-3 rounded-2xl px-4 py-2 text-sm font-medium transition ${
-              isActive ? 'bg-primary text-white shadow-glow' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
+            `flex items-center gap-3 rounded-2xl px-4 py-2 text-sm font-medium transition ${isActive ? 'bg-primary text-white shadow-glow' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700'
             }`
           }
         >
