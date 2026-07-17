@@ -21,7 +21,6 @@ function CGPACalculatorPage() {
   const calculateCGPA = () => {
     const validSubjects = subjects.filter((s) => s.name && s.credits && s.grade);
     if (validSubjects.length === 0) {
-      toast.error('Add at least one subject with grade');
       return 0;
     }
     const totalPoints = validSubjects.reduce((sum, s) => sum + grades[s.grade] * parseFloat(s.credits), 0);
@@ -47,34 +46,34 @@ function CGPACalculatorPage() {
 
   return (
     <section className="space-y-8">
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-semibold text-slate-900">CGPA Calculator</h1>
-        <p className="mt-2 text-slate-600">Calculate your cumulative GPA with dynamic subjects</p>
+      <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 shadow-card transition-colors duration-300">
+        <h1 className="text-3xl font-serif font-bold text-foreground dark:text-white">CGPA Calculator</h1>
+        <p className="mt-2 text-sm text-foreground-muted dark:text-slate-400">Calculate your cumulative GPA with dynamic subjects</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card space-y-4 transition-colors duration-300">
           <div className="space-y-4">
             {subjects.map((subject, idx) => (
-              <div key={idx} className="flex gap-3">
+              <div key={idx} className="flex gap-3 items-center">
                 <input
                   type="text"
                   placeholder="Subject name"
                   value={subject.name}
                   onChange={(e) => handleChange(idx, 'name', e.target.value)}
-                  className="flex-1 rounded-2xl border border-slate-200 px-4 py-2 outline-none focus:border-primary"
+                  className="flex-1 rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated text-foreground dark:text-white px-4 py-2.5 outline-none focus:border-primary dark:focus:border-secondary transition-all text-sm"
                 />
                 <input
                   type="number"
                   placeholder="Credits"
                   value={subject.credits}
                   onChange={(e) => handleChange(idx, 'credits', e.target.value)}
-                  className="w-20 rounded-2xl border border-slate-200 px-4 py-2 outline-none focus:border-primary"
+                  className="w-24 rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated text-foreground dark:text-white px-4 py-2.5 outline-none focus:border-primary dark:focus:border-secondary transition-all text-sm"
                 />
                 <select
                   value={subject.grade}
                   onChange={(e) => handleChange(idx, 'grade', e.target.value)}
-                  className="rounded-2xl border border-slate-200 px-4 py-2 outline-none focus:border-primary"
+                  className="rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated text-foreground dark:text-white px-4 py-2.5 outline-none focus:border-primary dark:focus:border-secondary transition-all cursor-pointer text-sm"
                 >
                   {Object.keys(grades).map((g) => (
                     <option key={g} value={g}>
@@ -85,9 +84,10 @@ function CGPACalculatorPage() {
                 {subjects.length > 1 && (
                   <button
                     onClick={() => handleRemoveSubject(idx)}
-                    className="rounded-2xl bg-red-100 p-2 text-red-600 hover:bg-red-200"
+                    className="rounded-xl bg-red-50 dark:bg-red-950/25 p-3 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-200 flex items-center justify-center"
+                    title="Remove subject"
                   >
-                    <FiTrash2 />
+                    <FiTrash2 className="w-4 h-4" />
                   </button>
                 )}
               </div>
@@ -95,18 +95,18 @@ function CGPACalculatorPage() {
           </div>
           <button
             onClick={handleAddSubject}
-            className="mt-4 flex items-center gap-2 rounded-full bg-secondary px-6 py-2 text-sm font-semibold text-white hover:bg-primary"
+            className="mt-4 flex items-center gap-2 rounded-full bg-secondary hover:bg-secondary-hover px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm"
           >
             <FiPlus className="h-4 w-4" />
             Add Subject
           </button>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card transition-colors duration-300 flex flex-col justify-center items-center">
           <div className="text-center">
-            <p className="text-sm uppercase text-slate-500">Your CGPA</p>
-            <p className="mt-4 text-5xl font-bold text-primary">{cgpa}</p>
-            <p className="mt-2 text-xs text-slate-500">Updated in real-time</p>
+            <p className="text-sm uppercase font-semibold tracking-wider text-foreground-muted dark:text-slate-400">Your CGPA</p>
+            <p className="mt-4 text-6xl font-serif font-bold text-primary dark:text-secondary">{cgpa}</p>
+            <p className="mt-2 text-xs text-foreground-muted dark:text-slate-500">Updated in real-time</p>
           </div>
         </div>
       </div>

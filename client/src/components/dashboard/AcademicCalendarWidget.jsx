@@ -9,19 +9,19 @@ function AcademicCalendarWidget() {
   ]);
 
   const eventColors = {
-    event: 'bg-blue-100 text-blue-700',
-    exam: 'bg-red-100 text-red-700',
-    assignment: 'bg-green-100 text-green-700',
+    event: 'bg-primary-light text-primary dark:bg-primary/20 dark:text-secondary border-l-4 border-primary dark:border-secondary',
+    exam: 'bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-350 border-l-4 border-red-500',
+    assignment: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-350 border-l-4 border-emerald-500',
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h3 className="font-semibold text-slate-900 mb-4">Academic Calendar</h3>
-      <div className="space-y-2 max-h-64 overflow-y-auto">
+    <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card transition-colors duration-300">
+      <h3 className="font-serif font-semibold text-foreground dark:text-white mb-4">Academic Calendar</h3>
+      <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-hide">
         {events.map((event, idx) => (
-          <div key={idx} className={`rounded-2xl p-3 ${eventColors[event.type]}`}>
-            <p className="text-sm font-medium">{event.title}</p>
-            <p className="text-xs opacity-75">{format(new Date(event.date), 'MMM d, yyyy')}</p>
+          <div key={idx} className={`rounded-xl p-3 transition-all duration-200 ${eventColors[event.type]}`}>
+            <p className="text-sm font-semibold">{event.title}</p>
+            <p className="text-xs opacity-75 mt-1">{format(new Date(event.date), 'MMM d, yyyy')}</p>
           </div>
         ))}
       </div>

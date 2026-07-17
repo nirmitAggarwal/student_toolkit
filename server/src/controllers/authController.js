@@ -103,3 +103,51 @@ export const githubCallback = async (req, res) => {
 export const healthCheck = (req, res) => {
   res.json({ status: 'ok', message: 'Auth service is running' });
 };
+
+export const mockLogin = async (req, res) => {
+  try {
+    const mockUserData = {
+      githubId: 'mock-github-id-12345',
+      email: 'student.msit@example.com',
+      name: 'Dev Student',
+      college: 'MSIT',
+      branch: 'CSE',
+      semester: 4,
+      rollNumber: '00115002722',
+      theme: 'light',
+      avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=120',
+      bio: 'Engineering student in MSIT. Building cool projects.'
+    };
+    
+    let user = await User.findOne({ githubId: mockUserData.githubId });
+    if (!user) {
+      user = await User.create(mockUserData);
+    }
+    
+    const jwtToken = jwt.sign(
+      { id: user._id.toString(), email: user.email },
+      process.env.JWT_SECRET || 'secret',
+      { expiresIn: '7d' }
+    );
+    
+    res.json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        college: user.college,
+        branch: user.branch,
+        semester: user.semester,
+        rollNumber: user.rollNumber,
+        theme: user.theme,
+        avatar: user.avatar,
+        bio: user.bio
+      },
+      token: jwtToken,
+    });
+  } catch (error) {
+    console.error('Mock login error:', error);
+    res.status(500).json({ message: 'Mock login failed' });
+  }
+};
+

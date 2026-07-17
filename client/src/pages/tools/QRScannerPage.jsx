@@ -38,8 +38,6 @@ function QRScannerPage() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Create a temporary element to run scanFile
-    // html5-qrcode requires a DOM element or ID to initialize even for file scanning
     const tempId = 'temp-file-scanner-container';
     let tempDiv = document.getElementById(tempId);
     if (!tempDiv) {
@@ -88,7 +86,6 @@ function QRScannerPage() {
     toast.success('History cleared');
   };
 
-  // useEffect handles the camera scanning lifecycle safely when container is guaranteed in the DOM
   useEffect(() => {
     let activeScanner = null;
 
@@ -115,7 +112,6 @@ function QRScannerPage() {
                 ...prev,
               ]);
               toast.success('QR Code scanned!');
-              // Vibrate device if supported
               if (navigator.vibrate) {
                 navigator.vibrate(200);
               }
@@ -134,7 +130,6 @@ function QRScannerPage() {
         }
       };
 
-      // Delay slightly to ensure React has fully rendered the div
       const timer = setTimeout(initializeScanner, 100);
       return () => clearTimeout(timer);
     }
@@ -146,28 +141,27 @@ function QRScannerPage() {
     };
   }, [isScanning, activeMode]);
 
-  // Clean up if we toggle modes
   useEffect(() => {
     stopScanning();
   }, [activeMode]);
 
   return (
-    <section className="space-y-8 text-slate-800 dark:text-slate-100">
-      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm">
-        <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">QR Scanner</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-400">Scan QR codes using your webcam/camera or upload an image file</p>
+    <section className="space-y-8 text-foreground dark:text-slate-100">
+      <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 shadow-card transition-colors duration-300">
+        <h1 className="text-3xl font-serif font-bold text-foreground dark:text-white">QR Scanner</h1>
+        <p className="mt-2 text-sm text-foreground-muted dark:text-slate-400">Scan QR codes using your webcam/camera or upload an image file</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.8fr_1.2fr]">
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col">
+        <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card flex flex-col transition-colors duration-300">
           {/* Mode Switcher */}
-          <div className="flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl mb-6 self-start">
+          <div className="flex bg-background dark:bg-background-dark p-1.5 rounded-xl mb-6 self-start">
             <button
               onClick={() => setActiveMode('camera')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold transition ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 ${
                 activeMode === 'camera'
-                  ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-surface dark:bg-surface-dark text-primary dark:text-secondary shadow-sm border border-border dark:border-border-dark'
+                  : 'text-foreground-muted hover:text-foreground dark:hover:text-white'
               }`}
             >
               <FiCamera className="h-4 w-4" />
@@ -175,10 +169,10 @@ function QRScannerPage() {
             </button>
             <button
               onClick={() => setActiveMode('file')}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold transition ${
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-semibold transition-all duration-200 ${
                 activeMode === 'file'
-                  ? 'bg-white dark:bg-slate-700 text-primary shadow-sm'
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  ? 'bg-surface dark:bg-surface-dark text-primary dark:text-secondary shadow-sm border border-border dark:border-border-dark'
+                  : 'text-foreground-muted hover:text-foreground dark:hover:text-white'
               }`}
             >
               <FiUpload className="h-4 w-4" />
@@ -189,13 +183,12 @@ function QRScannerPage() {
           {activeMode === 'camera' ? (
             <div className="flex-1 flex flex-col justify-between min-h-[350px]">
               {isScanning ? (
-                <div className="space-y-4 flex-1 flex flex-col">
-                  <div className="relative rounded-2xl overflow-hidden border-2 border-primary bg-black flex-1 flex items-center justify-center min-h-[300px]">
+                <div className="space-y-4 flex-1 flex flex-col animate-fade-in-up">
+                  <div className="relative rounded-xl overflow-hidden border-2 border-primary bg-black flex-1 flex items-center justify-center min-h-[300px]">
                     <div
                       id="qr-scanner-container"
                       className="w-full h-full max-w-md"
                     />
-                    {/* Corner Reticles for scanning look & feel */}
                     <div className="absolute inset-0 pointer-events-none border-[16px] border-black/40 flex items-center justify-center">
                       <div className="w-64 h-64 border-2 border-white/60 relative animate-pulse">
                         <span className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-primary -mt-1 -ml-1"></span>
@@ -207,30 +200,30 @@ function QRScannerPage() {
                   </div>
                   <button
                     onClick={stopScanning}
-                    className="w-full rounded-2xl bg-red-500 hover:bg-red-600 active:scale-95 px-6 py-3.5 font-semibold text-white transition shadow-lg shadow-red-500/10"
+                    className="w-full rounded-full bg-red-500 hover:bg-red-600 active:scale-95 px-6 py-3.5 font-semibold text-white transition-all shadow-lg"
                   >
                     Stop Scanning
                   </button>
                 </div>
               ) : (
                 <div className="space-y-6 flex-1 flex flex-col justify-center items-center text-center p-8">
-                  <div className="h-20 w-20 rounded-3xl bg-primary/10 flex items-center justify-center mb-2">
-                    <FiCamera className="h-10 w-10 text-primary" />
+                  <div className="h-20 w-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-2 text-primary dark:text-secondary">
+                    <FiCamera className="h-10 w-10" />
                   </div>
                   <div className="max-w-sm">
-                    <p className="text-xl font-bold text-slate-900 dark:text-white">Webcam QR Scanner</p>
-                    <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-xl font-serif font-bold text-foreground dark:text-white">Webcam QR Scanner</p>
+                    <p className="mt-2 text-sm text-foreground-muted dark:text-slate-400">
                       Scan QR codes dynamically using your device camera.
                     </p>
                   </div>
                   {cameraError && (
-                    <div className="rounded-2xl bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 px-4 py-3 text-sm max-w-md">
+                    <div className="rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/20 text-red-700 dark:text-red-400 px-4 py-3 text-sm max-w-md">
                       {cameraError}
                     </div>
                   )}
                   <button
                     onClick={startScanning}
-                    className="w-full max-w-sm rounded-2xl bg-primary hover:bg-secondary active:scale-95 px-6 py-3.5 font-semibold text-white transition shadow-lg shadow-primary/20"
+                    className="w-full max-w-sm rounded-full bg-primary hover:bg-primary-hover active:scale-98 px-6 py-3.5 font-semibold text-white transition-all shadow-glow"
                   >
                     Start Scanning
                   </button>
@@ -238,12 +231,12 @@ function QRScannerPage() {
               )}
             </div>
           ) : (
-            <div className="flex-1 flex flex-col justify-center items-center text-center p-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl bg-slate-50 dark:bg-slate-950/20 min-h-[350px]">
-              <div className="h-20 w-20 rounded-3xl bg-secondary/10 flex items-center justify-center mb-4">
-                <FiUpload className="h-10 w-10 text-secondary" />
+            <div className="flex-1 flex flex-col justify-center items-center text-center p-12 border-2 border-dashed border-border dark:border-border-dark rounded-xl bg-background dark:bg-surface-dark-elevated/20 min-h-[350px]">
+              <div className="h-20 w-20 rounded-2xl bg-secondary/10 flex items-center justify-center mb-4 text-secondary">
+                <FiUpload className="h-10 w-10" />
               </div>
-              <p className="text-xl font-bold text-slate-900 dark:text-white">Scan from Image File</p>
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400 max-w-xs mb-6">
+              <p className="text-xl font-serif font-bold text-foreground dark:text-white">Scan from Image File</p>
+              <p className="mt-2 text-sm text-foreground-muted dark:text-slate-400 max-w-xs mb-6">
                 Upload a JPEG, PNG, or WebP image containing a QR code to decode it.
               </p>
               <input
@@ -256,7 +249,7 @@ function QRScannerPage() {
               />
               <label
                 htmlFor="qr-image-upload"
-                className="cursor-pointer rounded-2xl bg-secondary hover:bg-primary active:scale-95 px-6 py-3.5 font-semibold text-white transition shadow-lg shadow-secondary/20 block"
+                className="cursor-pointer rounded-full bg-secondary hover:bg-secondary-hover px-6 py-3.5 font-semibold text-white transition-all shadow-sm block"
               >
                 Choose Image File
               </label>
@@ -265,11 +258,11 @@ function QRScannerPage() {
         </div>
 
         {/* Results / History */}
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col h-[480px]">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+        <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card flex flex-col h-[480px] transition-colors duration-300">
+          <div className="flex items-center justify-between pb-4 border-b border-border dark:border-border-dark">
+            <h3 className="text-lg font-serif font-bold text-foreground dark:text-white flex items-center gap-2">
               History
-              <span className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-2 py-0.5 rounded-full font-normal">
+              <span className="text-xs bg-primary/10 dark:bg-secondary/15 text-primary dark:text-secondary px-2 py-0.5 rounded-full font-semibold">
                 {scannedResults.length}
               </span>
             </h3>
@@ -285,9 +278,9 @@ function QRScannerPage() {
             )}
           </div>
 
-          <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1">
+          <div className="flex-1 overflow-y-auto py-4 space-y-3 pr-1 scrollbar-hide">
             {scannedResults.length === 0 ? (
-              <div className="h-full flex flex-col justify-center items-center text-center text-slate-400 dark:text-slate-600">
+              <div className="h-full flex flex-col justify-center items-center text-center text-foreground-muted">
                 <p className="text-sm">No QR codes scanned yet.</p>
                 <p className="text-xs mt-1">Successfully scanned values will appear here.</p>
               </div>
@@ -295,30 +288,30 @@ function QRScannerPage() {
               scannedResults.map((result) => (
                 <div
                   key={result.id}
-                  className="flex items-start gap-3 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 p-3.5 hover:border-slate-200 dark:hover:border-slate-700 transition"
+                  className="flex items-start gap-3 rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated/40 p-3.5 hover:border-primary dark:hover:border-secondary transition-all"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-[10px] font-mono text-slate-400 dark:text-slate-500">
+                    <p className="text-[10px] font-mono text-foreground-muted">
                       {result.timestamp}
                     </p>
-                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 break-all mt-1 font-mono">
+                    <p className="text-sm font-semibold text-foreground dark:text-slate-200 break-all mt-1 font-mono">
                       {result.value}
                     </p>
                   </div>
                   <div className="flex gap-1 shrink-0">
                     <button
                       onClick={() => copyToClipboard(result.value)}
-                      className="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white rounded-xl transition"
+                      className="p-2 hover:bg-background dark:hover:bg-surface-dark text-foreground-muted hover:text-primary dark:hover:text-secondary rounded-lg transition-all"
                       title="Copy content"
                     >
-                      <FiCopy className="h-4.5 w-4.5" />
+                      <FiCopy className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => removeResult(result.id)}
-                      className="p-2 hover:bg-red-50 dark:hover:bg-red-950/50 text-slate-400 hover:text-red-500 rounded-xl transition"
+                      className="p-2 hover:bg-red-50 dark:hover:bg-red-950/40 text-foreground-muted hover:text-red-500 rounded-lg transition-all"
                       title="Remove result"
                     >
-                      <FiX className="h-4.5 w-4.5" />
+                      <FiX className="h-4 w-4" />
                     </button>
                   </div>
                 </div>

@@ -9,18 +9,18 @@ function HolidayCalendarWidget() {
   ]);
 
   const holidayColors = {
-    national: 'bg-orange-100 text-orange-700',
-    international: 'bg-purple-100 text-purple-700',
+    national: 'bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300 border-l-4 border-amber-500',
+    international: 'bg-indigo-50 text-indigo-750 dark:bg-indigo-950/40 dark:text-indigo-300 border-l-4 border-indigo-500',
   };
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-      <h3 className="font-semibold text-slate-900 mb-4">Holidays</h3>
-      <div className="space-y-2 max-h-64 overflow-y-auto">
+    <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card transition-colors duration-300">
+      <h3 className="font-serif font-semibold text-foreground dark:text-white mb-4">Holidays</h3>
+      <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-hide">
         {holidays.map((holiday, idx) => (
-          <div key={idx} className={`rounded-2xl p-3 ${holidayColors[holiday.type]}`}>
-            <p className="text-sm font-medium">{holiday.name}</p>
-            <p className="text-xs opacity-75">{format(new Date(holiday.date), 'MMM d, yyyy')}</p>
+          <div key={idx} className={`rounded-xl p-3 transition-all duration-200 ${holidayColors[holiday.type]}`}>
+            <p className="text-sm font-semibold">{holiday.name}</p>
+            <p className="text-xs opacity-75 mt-1">{format(new Date(holiday.date), 'MMM d, yyyy')}</p>
           </div>
         ))}
       </div>

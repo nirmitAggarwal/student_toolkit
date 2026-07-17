@@ -9,31 +9,31 @@ function Topbar() {
   const navigate = useNavigate();
 
   return (
-    <header className="flex items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-4 shadow-sm">
+    <header className="flex items-center justify-between gap-4 border-b border-border dark:border-border-dark bg-surface dark:bg-surface-dark px-6 py-4 shadow-card transition-colors duration-300">
       <div>
-        <p className="text-sm text-slate-500 dark:text-slate-400">Welcome, {user?.name || 'Scholar'}</p>
-        <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Your Academic Hub</h2>
+        <p className="text-sm text-foreground-muted dark:text-slate-400">Welcome, {user?.name || 'Scholar'}</p>
+        <h2 className="text-xl font-serif font-semibold text-foreground dark:text-white">Your Academic Hub</h2>
       </div>
       <div className="flex items-center gap-3">
-        <div className="relative hidden sm:block rounded-2xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 px-4 py-3 text-slate-600 dark:text-slate-400">
-          <FiSearch className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2" />
+        <div className="relative hidden sm:block rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated px-4 py-2.5 transition-colors duration-300">
+          <FiSearch className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted dark:text-slate-400" />
           <input
             type="search"
-            placeholder="Search tools"
-            className="w-full bg-transparent pl-10 outline-none dark:text-white"
+            placeholder="Search tools..."
+            className="w-full bg-transparent pl-7 outline-none text-foreground dark:text-white placeholder:text-foreground-muted dark:placeholder:text-slate-500 text-sm"
             aria-label="Search tools"
           />
         </div>
         <button
           onClick={toggleTheme}
-          className="rounded-full bg-slate-100 dark:bg-slate-700 p-3 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition"
+          className="rounded-full bg-primary-light dark:bg-surface-dark-elevated p-3 text-primary dark:text-secondary hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-white transition-all duration-200"
           title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
         >
           {theme === 'light' ? <FiMoon className="h-5 w-5" /> : <FiSun className="h-5 w-5" />}
         </button>
         <button
           onClick={() => navigate('/settings')}
-          className="rounded-full bg-slate-100 dark:bg-slate-700 p-3 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition"
+          className="rounded-full bg-primary-light dark:bg-surface-dark-elevated p-3 text-primary dark:text-secondary hover:bg-primary hover:text-white dark:hover:bg-secondary dark:hover:text-white transition-all duration-200"
           title="Settings"
         >
           <FiSettings className="h-5 w-5" />

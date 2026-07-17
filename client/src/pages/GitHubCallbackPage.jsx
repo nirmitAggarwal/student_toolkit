@@ -41,10 +41,10 @@ function GitHubCallbackPage() {
   }, [searchParams, navigate, setUser]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary via-secondary to-accent">
-      <div className="text-center">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-white border-t-transparent mx-auto"></div>
-        <p className="mt-4 text-white text-lg">Authenticating with GitHub...</p>
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-primary via-primary-dark to-foreground">
+      <div className="text-center animate-fade-in-up">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/25 border-t-white mx-auto"></div>
+        <p className="mt-4 text-white text-lg font-serif">Authenticating with GitHub...</p>
       </div>
     </div>
   );
