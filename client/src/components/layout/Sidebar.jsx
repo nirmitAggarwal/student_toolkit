@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { FiHome, FiBookOpen, FiBarChart2, FiPercent, FiImage, FiCheckCircle, FiCalendar, FiCode, FiFilter, FiFileText, FiSettings } from 'react-icons/fi';
+import { FiHome, FiBookOpen, FiPercent, FiImage, FiCheckCircle, FiCalendar, FiCode, FiFilter, FiFileText, FiSettings } from 'react-icons/fi';
 import { useAuthStore } from '../../store/useAuthStore';
 
 const tools = [
@@ -12,6 +12,7 @@ const tools = [
   { group: 'Productivity', items: [
     { label: 'Attendance Tracker', path: '/tools/attendance', icon: FiCheckCircle },
     { label: 'Time Table', path: '/tools/timetable', icon: FiCalendar },
+    { label: 'Calendar', path: '/calendar', icon: FiCalendar },
   ]},
   { group: 'Utilities', items: [
     { label: 'PDF Merger', path: '/tools/pdf', icon: FiFileText },

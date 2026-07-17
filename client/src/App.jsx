@@ -23,6 +23,7 @@ import QRGeneratorPage from './pages/tools/QRGeneratorPage.jsx';
 import QRScannerPage from './pages/tools/QRScannerPage.jsx';
 import UnitConverterPage from './pages/tools/UnitConverterPage.jsx';
 import PDFMergerPage from './pages/tools/PDFMergerPage.jsx';
+import CalendarPage from "./pages/tools/CalendarPage.jsx";
 
 function App() {
   const { isAuthenticated, restoreSession } = useAuthStore();
@@ -73,8 +74,9 @@ function App() {
                       />
                       <Route path="/tools" element={<ToolsPage />} />
                       <Route path="/settings" element={<SettingsPage />} />
-                      
+
                       {/* Tool Routes */}
+                      <Route path="/calendar" element={<CalendarPage />} />
                       <Route path="/tools/cgpa" element={<CGPAPage />} />
                       <Route path="/tools/sgpa" element={<SGPAPage />} />
                       <Route path="/tools/percentage" element={<PercentagePage />} />

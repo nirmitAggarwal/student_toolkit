@@ -6,6 +6,10 @@ import connectDatabase from './config/database.js';
 import apiRouter from './routes/apiRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import errorHandler from './middleware/errorHandler.js';
+import holidayRoutes from "./routes/holidayRoutes.js";
+import academicRouter from "./routes/academicRouter.js";
+import calendarRoutes from "./routes/calendarRoutes.js";
+
 
 const app = express();
 
@@ -15,6 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', apiRouter);
 app.use('/api/user', userRoutes);
+app.use("/api/holidays", holidayRoutes);
+app.use("/api/academic-calendar", academicRouter);
+app.use("/api/calendar", calendarRoutes);
 
 app.get('/', (req, res) => {
   res.json({ message: 'Student Toolkit API is running' });
