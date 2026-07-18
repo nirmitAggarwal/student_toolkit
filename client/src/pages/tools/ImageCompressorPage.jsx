@@ -9,9 +9,7 @@ import {
   FiRefreshCw, 
   FiX, 
   FiSettings,
-  FiInfo,
-  FiFilePlus,
-  FiChevronRight
+  FiInfo
 } from 'react-icons/fi';
 import imageCompression from 'browser-image-compression';
 import toast from 'react-hot-toast';
@@ -113,7 +111,6 @@ function ImageCompressorPage() {
 
   const handleImageSelect = (e) => {
     handleFiles(e.target.files);
-    // Reset file input value so same file can be uploaded again
     if (e.target) e.target.value = '';
   };
 
@@ -123,7 +120,6 @@ function ImageCompressorPage() {
     setIsDragging(true);
   };
 
-  // Drag leave handler
   const handleDragLeave = () => {
     setIsDragging(false);
   };
@@ -141,7 +137,6 @@ function ImageCompressorPage() {
     const imgIndex = images.findIndex((img) => img.id === id);
     if (imgIndex === -1) return;
 
-    // Set state to compressing
     setImages((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, status: 'compressing', progress: 10 } : item
@@ -155,10 +150,8 @@ function ImageCompressorPage() {
       let targetMaxSizeMB = originalSizeMB;
 
       if (mode === 'lossless') {
-        // High limit to avoid visual loss
         targetMaxSizeMB = originalSizeMB * 1.5; 
       } else {
-        // Target dynamic maximum file size based on quality slider percentage
         targetMaxSizeMB = Math.max(0.02, originalSizeMB * (quality / 100) * 0.95);
       }
 
@@ -244,7 +237,6 @@ function ImageCompressorPage() {
     const link = document.createElement('a');
     link.href = img.compressedPreview;
     
-    // Determine extension
     let extension = img.original.name.split('.').pop();
     if (format !== 'original') {
       extension = format;
@@ -291,15 +283,15 @@ function ImageCompressorPage() {
   return (
     <section className="space-y-6 max-w-[1400px] mx-auto">
       {/* Title Header Section */}
-      <div className="rounded-3xl border border-slate-200 bg-gradient-to-r from-white to-slate-50 p-6 sm:p-8 shadow-sm dark:bg-gradient-to-r dark:from-slate-900 dark:to-slate-900/50 dark:border-slate-800">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-3">
-          <span className="p-2 rounded-2xl bg-primary/10 text-primary dark:bg-primary/20">
+      <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 sm:p-8 shadow-card transition-colors duration-300">
+        <h1 className="text-3xl font-serif font-bold text-foreground dark:text-white flex items-center gap-3">
+          <span className="p-2 rounded-xl bg-primary/10 text-primary dark:bg-secondary/15 dark:text-secondary">
             <FiSliders className="h-6 w-6" />
           </span>
           Image Compressor
         </h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-400 max-w-2xl text-sm sm:text-base">
-          Compress images instantly using multi-threaded web workers directly in your browser. Files are processed locally on your machine—never uploaded to any server.
+        <p className="mt-2 text-foreground-muted dark:text-slate-400 max-w-2xl text-sm sm:text-base leading-relaxed">
+          Compress images instantly using multi-threaded web workers directly in your browser. Files are processed locally on your machine — never uploaded to any server.
         </p>
       </div>
 
@@ -313,10 +305,10 @@ function ImageCompressorPage() {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
-            className={`cursor-pointer rounded-3xl border-2 border-dashed p-10 text-center transition-all duration-200 relative overflow-hidden flex flex-col items-center justify-center min-h-[220px] ${
+            className={`cursor-pointer rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[220px] ${
               isDragging 
-                ? 'border-primary bg-primary/5 dark:bg-primary/10 scale-[0.99] shadow-inner' 
-                : 'border-slate-300 bg-white hover:border-primary hover:bg-blue-50/50 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-primary/50 dark:hover:bg-slate-800/40'
+                ? 'border-primary bg-primary-light/50 dark:bg-primary/10 scale-[0.99] shadow-inner' 
+                : 'border-border bg-surface hover:border-primary hover:bg-primary-light/20 dark:border-border-dark dark:bg-surface-dark dark:hover:border-secondary dark:hover:bg-surface-dark-elevated/40'
             }`}
           >
             <input
@@ -328,38 +320,38 @@ function ImageCompressorPage() {
               className="hidden"
             />
             
-            <div className="p-4 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 mb-4 transition-transform group-hover:scale-110">
-              <FiUploadCloud className="h-10 w-10 text-primary dark:text-accent" />
+            <div className="p-4 rounded-full bg-background dark:bg-surface-dark-elevated text-primary dark:text-secondary mb-4 transition-transform hover:scale-110">
+              <FiUploadCloud className="h-10 w-10" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+            <h3 className="text-lg font-serif font-semibold text-foreground dark:text-white">
               Drag & Drop your images here
             </h3>
-            <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-sm text-foreground-muted dark:text-slate-450">
               or click to browse from files
             </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-background px-3.5 py-1 text-xs font-semibold text-foreground dark:bg-surface-dark-elevated dark:text-slate-300">
               Supports JPEG, PNG, and WebP
             </span>
           </div>
 
           {/* Files List Panel */}
           {images.length > 0 && (
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:bg-slate-900 dark:border-slate-800 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-4">
+            <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card space-y-4 transition-colors duration-300">
+              <div className="flex items-center justify-between border-b border-border dark:border-border-dark pb-4">
                 <div>
-                  <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Uploaded Queue</h2>
-                  <p className="text-xs text-slate-500">{images.length} file(s) loaded</p>
+                  <h2 className="text-lg font-serif font-semibold text-foreground dark:text-white">Uploaded Queue</h2>
+                  <p className="text-xs text-foreground-muted">{images.length} file(s) loaded</p>
                 </div>
                 <button
                   onClick={clearAll}
-                  className="flex items-center gap-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 px-3 py-1.5 text-xs font-semibold dark:border-red-900/30 dark:text-red-400 dark:hover:bg-red-950/30 transition"
+                  className="flex items-center gap-1.5 rounded-full border border-red-200 text-red-650 hover:bg-red-50 px-4 py-1.5 text-xs font-semibold dark:border-red-900/30 dark:text-red-400 dark:hover:bg-red-950/30 transition duration-200"
                 >
                   <FiTrash2 className="h-3.5 w-3.5" />
                   Clear All
                 </button>
               </div>
 
-              <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
+              <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1 scrollbar-hide">
                 {images.map((img) => {
                   const hasSavings = img.compressedSize > 0;
                   const savingsPct = hasSavings 
@@ -369,35 +361,35 @@ function ImageCompressorPage() {
                   return (
                     <div 
                       key={img.id} 
-                      className={`group relative rounded-2xl border border-slate-150 p-4 transition-all duration-200 ${
+                      className={`group relative rounded-xl border p-4 transition-all duration-200 ${
                         img.status === 'success' 
-                          ? 'border-green-100 bg-green-50/10 dark:border-green-950/20 dark:bg-green-950/5' 
+                          ? 'border-emerald-100 bg-emerald-50/10 dark:border-emerald-950/20 dark:bg-emerald-950/5' 
                           : img.status === 'error'
-                          ? 'border-red-150 bg-red-50/10 dark:border-red-950/20 dark:bg-red-950/5'
-                          : 'border-slate-100 bg-slate-50/30 dark:border-slate-800/40 dark:bg-slate-900/50'
+                          ? 'border-red-100 bg-red-50/10 dark:border-red-950/20 dark:bg-red-950/5'
+                          : 'border-border bg-background/50 dark:border-border-dark dark:bg-surface-dark-elevated/40'
                       }`}
                     >
                       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         
                         {/* Left: Thumbnail and Filename details */}
                         <div className="flex items-center gap-4 min-w-0">
-                          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-700">
+                          <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated">
                             <img
                               src={img.originalPreview}
                               alt="preview"
                               className="h-full w-full object-cover"
                             />
                             {img.status === 'success' && (
-                              <div className="absolute right-0 bottom-0 bg-green-500 p-0.5 rounded-tl-lg text-white">
+                              <div className="absolute right-0 bottom-0 bg-emerald-550 dark:bg-emerald-600 p-0.5 rounded-tl-lg text-white">
                                 <FiCheckCircle className="h-3.5 w-3.5" />
                               </div>
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-200" title={img.original.name}>
+                            <p className="truncate text-sm font-semibold text-foreground dark:text-slate-200" title={img.original.name}>
                               {img.original.name}
                             </p>
-                            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-slate-500 dark:text-slate-400">
+                            <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-foreground-muted dark:text-slate-400 font-medium">
                               <span>{formatSize(img.originalSize)}</span>
                               {img.originalWidth > 0 && (
                                 <span className="opacity-60">• {img.originalWidth}x{img.originalHeight} px</span>
@@ -410,10 +402,10 @@ function ImageCompressorPage() {
                         <div className="flex flex-wrap items-center gap-3 shrink-0">
                           {img.status === 'success' && (
                             <div className="text-right">
-                              <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-800 dark:bg-green-950/40 dark:text-green-400">
+                              <span className="inline-flex items-center rounded-full bg-emerald-105/10 dark:bg-emerald-950/40 px-2.5 py-0.5 text-xs font-semibold text-emerald-700 dark:text-emerald-450 border border-emerald-200/20">
                                 -{savingsPct}% Saved
                               </span>
-                              <p className="mt-0.5 text-xs font-medium text-slate-600 dark:text-slate-400">
+                              <p className="mt-1 text-xs font-medium text-foreground-muted dark:text-slate-400">
                                 {formatSize(img.compressedSize)} ({img.compressedWidth}x{img.compressedHeight})
                               </p>
                             </div>
@@ -421,13 +413,13 @@ function ImageCompressorPage() {
 
                           {img.status === 'compressing' && (
                             <div className="w-28 space-y-1">
-                              <div className="flex justify-between text-xs font-medium text-slate-500">
+                              <div className="flex justify-between text-xs font-medium text-foreground-muted">
                                 <span>Compressing...</span>
                                 <span>{Math.round(img.progress)}%</span>
                               </div>
-                              <div className="h-1.5 w-full rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden">
+                              <div className="h-1.5 w-full rounded-full bg-background dark:bg-background-dark overflow-hidden">
                                 <div 
-                                  className="h-full bg-primary transition-all duration-150"
+                                  className="h-full bg-primary dark:bg-secondary transition-all duration-150"
                                   style={{ width: `${img.progress}%` }}
                                 />
                               </div>
@@ -435,7 +427,7 @@ function ImageCompressorPage() {
                           )}
 
                           {img.status === 'error' && (
-                            <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:bg-red-950 dark:text-red-400" title={img.errorMsg}>
+                            <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-semibold text-red-800 dark:bg-red-950 dark:text-red-400" title={img.errorMsg}>
                               Error
                             </span>
                           )}
@@ -448,7 +440,7 @@ function ImageCompressorPage() {
                                   setActiveComparisonId(img.id);
                                   setSliderPosition(50);
                                 }}
-                                className="rounded-lg p-2 text-slate-600 hover:text-primary hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition"
+                                className="rounded-xl p-2 text-foreground-muted hover:text-primary dark:hover:text-secondary hover:bg-background dark:hover:bg-surface-dark-elevated transition-all"
                                 title="Compare visual output before and after"
                               >
                                 <FiEye className="h-4 w-4" />
@@ -458,7 +450,7 @@ function ImageCompressorPage() {
                             {img.status === 'pending' && (
                               <button
                                 onClick={() => compressImage(img.id)}
-                                className="rounded-lg bg-primary hover:bg-secondary px-3 py-1.5 text-xs font-bold text-white transition shadow-sm"
+                                className="rounded-full bg-primary hover:bg-primary-hover px-4 py-1.5 text-xs font-bold text-white transition-all shadow-sm"
                               >
                                 Compress
                               </button>
@@ -467,7 +459,7 @@ function ImageCompressorPage() {
                             {img.status === 'error' && (
                               <button
                                 onClick={() => compressImage(img.id)}
-                                className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:text-primary hover:bg-slate-100 dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-800 transition"
+                                className="rounded-xl border border-border dark:border-border-dark p-2 text-foreground-muted hover:text-primary dark:hover:text-secondary hover:bg-background dark:hover:bg-surface-dark-elevated transition-all"
                                 title="Retry compression"
                               >
                                 <FiRefreshCw className="h-4 w-4" />
@@ -477,7 +469,7 @@ function ImageCompressorPage() {
                             {img.status === 'success' && (
                               <button
                                 onClick={() => downloadImage(img.id)}
-                                className="rounded-lg border border-slate-250 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:border-slate-750 dark:hover:bg-slate-700 p-2 text-slate-700 dark:text-white transition"
+                                className="rounded-xl border border-border dark:border-border-dark bg-background hover:bg-primary-light/50 dark:bg-surface-dark-elevated dark:hover:bg-surface-dark p-2 text-foreground dark:text-white transition-all"
                                 title="Download compressed file"
                               >
                                 <FiDownload className="h-4 w-4" />
@@ -486,7 +478,7 @@ function ImageCompressorPage() {
 
                             <button
                               onClick={() => removeImage(img.id)}
-                              className="rounded-lg p-2 text-slate-400 hover:text-red-500 hover:bg-red-50/50 dark:hover:bg-red-950/20 transition"
+                              className="rounded-xl p-2 text-foreground-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all"
                               title="Remove item"
                             >
                               <FiTrash2 className="h-4 w-4" />
@@ -505,12 +497,12 @@ function ImageCompressorPage() {
 
         {/* Right Column: Compression Settings */}
         <div className="space-y-6">
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:bg-slate-900 dark:border-slate-800 space-y-6">
+          <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card space-y-6 transition-colors duration-300">
             
             {/* Compression Presets Mode Selector */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2 mb-3">
-                <FiSettings className="h-4 w-4 text-primary" />
+              <h3 className="text-sm font-semibold text-foreground dark:text-white flex items-center gap-2 mb-3">
+                <FiSettings className="h-4 w-4 text-primary dark:text-secondary" />
                 Compression Mode
               </h3>
               <div className="grid grid-cols-2 gap-2">
@@ -524,14 +516,14 @@ function ImageCompressorPage() {
                   <button
                     key={item.id}
                     onClick={() => handleModeChange(item.id)}
-                    className={`p-3 rounded-2xl border text-left transition ${
+                    className={`p-3 rounded-xl border text-left transition-all duration-200 ${
                       mode === item.id 
-                        ? 'border-primary bg-primary/5 dark:bg-primary/10 dark:border-accent text-primary dark:text-accent font-semibold shadow-sm'
-                        : 'border-slate-200 hover:border-slate-350 bg-slate-50/30 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900/50 dark:hover:bg-slate-800'
+                        ? 'border-primary bg-primary-light/40 dark:bg-primary/10 dark:border-secondary text-primary dark:text-secondary font-semibold shadow-sm animate-pulse-subtle'
+                        : 'border-border hover:border-primary bg-background dark:border-border-dark dark:bg-surface-dark-elevated dark:hover:bg-surface-dark dark:hover:border-secondary'
                     } ${item.id === 'custom' ? 'col-span-2' : ''}`}
                   >
                     <p className="text-xs sm:text-sm">{item.label}</p>
-                    <span className="text-[10px] text-slate-500 font-normal leading-normal">{item.desc}</span>
+                    <span className="text-[10px] text-foreground-muted dark:text-slate-500 font-normal leading-normal">{item.desc}</span>
                   </button>
                 ))}
               </div>
@@ -539,7 +531,7 @@ function ImageCompressorPage() {
 
             {/* Target Output Format Converter */}
             <div>
-              <h3 className="text-sm font-semibold text-slate-900 dark:text-white flex items-center gap-2 mb-3">
+              <h3 className="text-sm font-semibold text-foreground dark:text-white flex items-center gap-2 mb-3 font-serif">
                 Convert Format
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -552,38 +544,38 @@ function ImageCompressorPage() {
                   <button
                     key={f.id}
                     onClick={() => setFormat(f.id)}
-                    className={`px-4 py-2 rounded-xl border text-xs font-semibold transition ${
+                    className={`px-4 py-2 rounded-full border text-xs font-semibold transition-all duration-200 ${
                       format === f.id
-                        ? 'bg-slate-900 border-slate-900 text-white dark:bg-slate-100 dark:border-slate-100 dark:text-slate-900'
-                        : 'border-slate-200 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800 dark:text-slate-300'
+                        ? 'bg-primary border-primary text-white dark:bg-secondary dark:border-secondary'
+                        : 'border-border hover:border-primary bg-surface dark:border-border-dark dark:bg-surface-dark-elevated dark:hover:border-secondary dark:text-slate-300'
                     }`}
                   >
                     {f.label}
                   </button>
                 ))}
               </div>
-              <p className="mt-2 text-[10px] text-slate-500 flex items-center gap-1">
-                <FiInfo className="h-3 w-3 shrink-0" />
+              <p className="mt-2 text-[10px] text-foreground-muted flex items-center gap-1">
+                <FiInfo className="h-3 w-3 shrink-0 text-primary dark:text-secondary" />
                 WebP files offer the best visual preservation and size reduction.
               </p>
             </div>
 
             {/* Custom settings controls */}
-            <div className={`space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800 transition-opacity duration-200 ${
-              mode !== 'custom' ? 'opacity-55 pointer-events-none select-none' : ''
+            <div className={`space-y-4 pt-4 border-t border-border dark:border-border-dark transition-all duration-300 ${
+              mode !== 'custom' ? 'opacity-40 pointer-events-none select-none' : ''
             }`}>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-semibold text-slate-500">Custom Configuration</span>
+                <span className="text-xs font-semibold text-foreground-muted">Custom Configuration</span>
                 {mode !== 'custom' && (
-                  <span className="text-[10px] text-slate-400 italic">Locked in preset</span>
+                  <span className="text-[10px] text-foreground-muted/70 italic">Locked in preset</span>
                 )}
               </div>
 
               {/* Quality Slider (Ignored for lossless mode) */}
               <div>
-                <div className="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300 mb-1">
+                <div className="flex justify-between text-xs font-semibold text-foreground dark:text-slate-300 mb-1">
                   <label>Quality Target</label>
-                  <span className="font-bold text-primary dark:text-accent">{quality}%</span>
+                  <span className="font-bold text-primary dark:text-secondary">{quality}%</span>
                 </div>
                 <input
                   type="range"
@@ -592,7 +584,7 @@ function ImageCompressorPage() {
                   disabled={mode !== 'custom'}
                   value={quality}
                   onChange={(e) => setQuality(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary"
+                  className="w-full h-1.5 bg-background dark:bg-background-dark rounded-lg appearance-none cursor-pointer accent-primary"
                 />
               </div>
 
@@ -604,9 +596,9 @@ function ImageCompressorPage() {
                     disabled={mode !== 'custom'}
                     checked={alwaysKeepResolution}
                     onChange={(e) => setAlwaysKeepResolution(e.target.checked)}
-                    className="rounded text-primary border-slate-300 focus:ring-primary dark:border-slate-800 h-4 w-4"
+                    className="rounded text-primary border-border focus:ring-primary dark:border-border-dark h-4 w-4"
                   />
-                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                  <span className="text-xs font-medium text-foreground dark:text-slate-300">
                     Always preserve original dimensions (no scaling)
                   </span>
                 </label>
@@ -614,8 +606,8 @@ function ImageCompressorPage() {
 
               {/* Resizing Max Width or Height */}
               {!alwaysKeepResolution && (
-                <div className="space-y-2 pl-6 animate-fadeIn">
-                  <div className="flex justify-between text-xs font-medium text-slate-700 dark:text-slate-300">
+                <div className="space-y-2 pl-6 transition-all">
+                  <div className="flex justify-between text-xs font-semibold text-foreground dark:text-slate-350">
                     <label>Max Width or Height</label>
                     <span className="font-bold">{maxWidthOrHeight} px</span>
                   </div>
@@ -627,18 +619,18 @@ function ImageCompressorPage() {
                     disabled={mode !== 'custom'}
                     value={maxWidthOrHeight}
                     onChange={(e) => setMaxWidthOrHeight(Number(e.target.value))}
-                    className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-primary"
+                    className="w-full h-1.5 bg-background dark:bg-background-dark rounded-lg appearance-none cursor-pointer accent-primary"
                   />
                 </div>
               )}
             </div>
 
             {/* Global Actions Block */}
-            <div className="pt-6 border-t border-slate-100 dark:border-slate-800 space-y-3">
+            <div className="pt-6 border-t border-border dark:border-border-dark space-y-3">
               <button
                 onClick={compressAll}
                 disabled={images.filter(img => img.status === 'pending' || img.status === 'error').length === 0 || isCompressingAll}
-                className="w-full flex items-center justify-center gap-2 rounded-2xl bg-primary hover:bg-secondary disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 disabled:cursor-not-allowed py-3 font-semibold text-white transition shadow-glow active:scale-98"
+                className="w-full flex items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary-hover disabled:bg-border dark:disabled:bg-border-dark disabled:text-foreground-muted disabled:cursor-not-allowed py-3 font-semibold text-white transition-all duration-200 shadow-glow"
               >
                 {isCompressingAll ? (
                   <>
@@ -655,7 +647,7 @@ function ImageCompressorPage() {
               <button
                 onClick={downloadAll}
                 disabled={images.filter(img => img.status === 'success').length === 0}
-                className="w-full flex items-center justify-center gap-2 rounded-2xl border border-slate-200 hover:border-slate-350 bg-white hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed py-3 font-semibold text-slate-800 dark:text-slate-100 transition"
+                className="w-full flex items-center justify-center gap-2 rounded-full border border-border hover:border-primary bg-surface hover:bg-primary-light/20 dark:border-border-dark dark:bg-surface-dark-elevated dark:hover:bg-surface-dark dark:hover:border-secondary disabled:opacity-40 disabled:cursor-not-allowed py-3 font-semibold text-foreground dark:text-slate-100 transition-all duration-250"
               >
                 <FiDownload className="h-4 w-4" />
                 Download All Compressed
@@ -669,33 +661,33 @@ function ImageCompressorPage() {
 
       {/* Before / After Comparison Split Lightbox Modal */}
       {comparisonImage && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6 md:p-10">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative">
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 animate-fadeIn">
+          <div className="bg-surface dark:bg-surface-dark border border-border dark:border-border-dark rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative">
             
             {/* Modal Header */}
-            <div className="p-4 sm:p-6 border-b border-slate-800 flex items-center justify-between">
+            <div className="p-4 sm:p-6 border-b border-border dark:border-border-dark flex items-center justify-between">
               <div>
-                <h3 className="text-base sm:text-lg font-semibold text-white truncate max-w-md sm:max-w-xl" title={comparisonImage.original.name}>
+                <h3 className="text-base sm:text-lg font-serif font-bold text-foreground dark:text-white truncate max-w-md sm:max-w-xl" title={comparisonImage.original.name}>
                   Comparing: {comparisonImage.original.name}
                 </h3>
-                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs text-slate-400">
+                <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1 text-xs text-foreground-muted font-medium">
                   <span>Original: {formatSize(comparisonImage.originalSize)} ({comparisonImage.originalWidth}x{comparisonImage.originalHeight})</span>
-                  <span className="text-green-400 font-medium">Compressed: {formatSize(comparisonImage.compressedSize)} ({comparisonImage.compressedWidth}x{comparisonImage.compressedHeight})</span>
-                  <span className="text-blue-400 font-bold">
+                  <span className="text-emerald-600 dark:text-emerald-450">Compressed: {formatSize(comparisonImage.compressedSize)} ({comparisonImage.compressedWidth}x{comparisonImage.compressedHeight})</span>
+                  <span className="text-primary dark:text-secondary font-bold">
                     -{Math.round((1 - comparisonImage.compressedSize / comparisonImage.originalSize) * 100)}% Size Reduced
                   </span>
                 </div>
               </div>
               <button
                 onClick={() => setActiveComparisonId(null)}
-                className="rounded-full bg-slate-800 hover:bg-slate-700 p-2 text-slate-450 hover:text-white transition"
+                className="rounded-full bg-background hover:bg-primary-light dark:bg-surface-dark-elevated dark:hover:bg-surface-dark p-2 text-foreground-muted hover:text-primary dark:hover:text-secondary transition-all"
               >
                 <FiX className="h-5 w-5" />
               </button>
             </div>
 
             {/* Slider container: matches dimensions and clips dynamically */}
-            <div className="flex-1 bg-slate-950 relative flex items-center justify-center p-4 overflow-hidden min-h-[300px] sm:min-h-[400px]">
+            <div className="flex-1 bg-background dark:bg-background-dark relative flex items-center justify-center p-4 overflow-hidden min-h-[300px] sm:min-h-[400px]">
               <div className="relative w-full h-full max-h-[55vh] aspect-video flex items-center justify-center overflow-hidden">
                 
                 {/* Underlay Image: Original */}
@@ -717,7 +709,7 @@ function ImageCompressorPage() {
                     clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)`,
                   }}
                 />
-                <div className="absolute top-4 right-4 bg-green-500/80 backdrop-blur-md px-3 py-1 rounded-full text-xs text-white z-10 font-semibold select-none border border-green-400/20">
+                <div className="absolute top-4 right-4 bg-emerald-600/90 backdrop-blur-md px-3 py-1 rounded-full text-xs text-white z-10 font-semibold select-none border border-white/10">
                   Compressed (After)
                 </div>
 
@@ -744,14 +736,14 @@ function ImageCompressorPage() {
             </div>
 
             {/* Modal Footer actions */}
-            <div className="p-4 sm:p-6 border-t border-slate-800 bg-slate-900/50 flex items-center justify-between flex-wrap gap-4">
-              <p className="text-xs text-slate-400">
+            <div className="p-4 sm:p-6 border-t border-border dark:border-border-dark bg-background/50 dark:bg-surface-dark-elevated/55 flex items-center justify-between flex-wrap gap-4">
+              <p className="text-xs text-foreground-muted font-medium">
                 💡 Drag the slider left/right to compare compression details.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => downloadImage(comparisonImage.id)}
-                  className="flex items-center gap-2 rounded-xl bg-primary hover:bg-secondary px-5 py-2.5 text-sm font-semibold text-white transition shadow-lg"
+                  className="flex items-center gap-2 rounded-full bg-primary hover:bg-primary-hover px-5 py-2.5 text-sm font-semibold text-white transition-all shadow-glow"
                 >
                   <FiDownload className="h-4 w-4" />
                   Download Compressed

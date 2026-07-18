@@ -67,9 +67,9 @@ function ExamCountdownWidget() {
     setNewExam({
       name: '',
       date: '',
-      hour: '',
-      minute: '',
-      period: '',
+      hour: '10',
+      minute: '00',
+      period: 'AM',
       color: '#3B82F6',
     });
     setShowForm(true);
@@ -143,13 +143,13 @@ function ExamCountdownWidget() {
   const upcomingExams = [...exams].sort((a, b) => a.date.getTime() - b.date.getTime());
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:bg-slate-900 dark:border-slate-800 transition-colors">
-      <div className="flex items-center justify-between mb-4 border-b border-slate-100 dark:border-slate-800 pb-3">
-        <h3 className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
-          <FiClock className="text-primary dark:text-accent h-5 w-5" />
+    <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card transition-colors duration-300">
+      <div className="flex items-center justify-between mb-4 border-b border-border dark:border-border-dark pb-3">
+        <h3 className="font-serif font-bold text-foreground dark:text-white flex items-center gap-2">
+          <FiClock className="text-primary dark:text-secondary h-5 w-5" />
           Exam Countdown
         </h3>
-        <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 text-xs font-semibold text-slate-600 dark:text-slate-400">
+        <span className="rounded-full bg-primary/10 dark:bg-secondary/10 px-2.5 py-0.5 text-xs font-semibold text-primary dark:text-secondary">
           {exams.length} active
         </span>
       </div>
@@ -158,8 +158,8 @@ function ExamCountdownWidget() {
       <div className="space-y-3">
         {upcomingExams.length === 0 ? (
           <div className="text-center py-6">
-            <p className="text-sm text-slate-500 dark:text-slate-400">No exams tracked yet.</p>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">Add one below to start counting down!</p>
+            <p className="text-sm text-foreground-muted dark:text-slate-400">No exams tracked yet.</p>
+            <p className="text-xs text-foreground-muted dark:text-slate-500 mt-1">Add one below to start counting down!</p>
           </div>
         ) : (
           upcomingExams.map((exam) => {
@@ -169,16 +169,16 @@ function ExamCountdownWidget() {
             return (
               <div 
                 key={exam.id} 
-                className="group relative flex items-center justify-between rounded-2xl bg-slate-50 dark:bg-slate-900/50 p-4 border-l-4 transition-all hover:shadow-sm" 
+                className="group relative flex items-center justify-between rounded-xl bg-background dark:bg-surface-dark-elevated p-4 border-l-4 transition-all hover:shadow-sm" 
                 style={{ borderLeftColor: exam.color }}
               >
                 {/* Left side: Exam Info */}
                 <div className="min-w-0 flex-1 pr-4">
-                  <p className="font-semibold text-slate-900 dark:text-white truncate" title={exam.name}>
+                  <p className="font-semibold text-foreground dark:text-white truncate text-sm" title={exam.name}>
                     {exam.name}
                   </p>
-                  <p className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1.5 mt-1 font-medium">
-                    <FiCalendar className="h-3.5 w-3.5 shrink-0 text-slate-400" />
+                  <p className="text-xs text-foreground-muted dark:text-slate-400 flex items-center gap-1.5 mt-1 font-medium">
+                    <FiCalendar className="h-3.5 w-3.5 shrink-0 text-foreground-muted" />
                     {format(exam.date, 'MMM d, yyyy • h:mm a')}
                   </p>
                 </div>
@@ -192,24 +192,24 @@ function ExamCountdownWidget() {
                   ) : (
                     <div className="flex gap-1 text-center font-mono">
                       {/* Days Segment */}
-                      <div className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
+                      <div className="bg-surface dark:bg-background-dark text-foreground dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
                         <span className="block font-bold text-sm">{time.days}</span>
-                        <span className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold uppercase">d</span>
+                        <span className="text-[9px] text-foreground-muted dark:text-slate-550 font-semibold uppercase">d</span>
                       </div>
                       {/* Hours Segment */}
-                      <div className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
+                      <div className="bg-surface dark:bg-background-dark text-foreground dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
                         <span className="block font-bold text-sm">{time.hours.toString().padStart(2, '0')}</span>
-                        <span className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold uppercase">h</span>
+                        <span className="text-[9px] text-foreground-muted dark:text-slate-550 font-semibold uppercase">h</span>
                       </div>
                       {/* Minutes Segment */}
-                      <div className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
+                      <div className="bg-surface dark:bg-background-dark text-foreground dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
                         <span className="block font-bold text-sm">{time.minutes.toString().padStart(2, '0')}</span>
-                        <span className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold uppercase">m</span>
+                        <span className="text-[9px] text-foreground-muted dark:text-slate-550 font-semibold uppercase">m</span>
                       </div>
                       {/* Seconds Segment */}
-                      <div className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
+                      <div className="bg-surface dark:bg-background-dark text-foreground dark:text-slate-200 px-2 py-1 rounded-lg text-xs min-w-[32px] shadow-sm">
                         <span className="block font-bold text-sm">{time.seconds.toString().padStart(2, '0')}</span>
-                        <span className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold uppercase">s</span>
+                        <span className="text-[9px] text-foreground-muted dark:text-slate-550 font-semibold uppercase">s</span>
                       </div>
                     </div>
                   )}
@@ -217,7 +217,7 @@ function ExamCountdownWidget() {
                   {/* Hover trash button to delete */}
                   <button
                     onClick={() => handleDeleteExam(exam.id, exam.name)}
-                    className="opacity-0 group-hover:opacity-100 focus:opacity-100 rounded-lg p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all shrink-0 ml-1"
+                    className="opacity-0 group-hover:opacity-100 focus:opacity-100 rounded-lg p-2 text-foreground-muted hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-all shrink-0 ml-1"
                     title={`Delete countdown for ${exam.name}`}
                   >
                     <FiTrash2 className="h-4 w-4" />
@@ -233,19 +233,19 @@ function ExamCountdownWidget() {
       {!showForm ? (
         <button 
           onClick={handleOpenForm} 
-          className="mt-4 w-full flex items-center justify-center gap-2 rounded-2xl bg-secondary hover:bg-primary px-4 py-2.5 text-sm font-semibold text-white transition shadow-sm"
+          className="mt-4 w-full flex items-center justify-center gap-2 rounded-full bg-secondary hover:bg-secondary-hover px-4 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm"
         >
           <FiPlus className="h-4 w-4" />
           Add Countdown
         </button>
       ) : (
-        <form onSubmit={handleAddExam} className="mt-4 space-y-4 p-4 bg-slate-50 dark:bg-slate-900/40 border border-slate-150 dark:border-slate-800/80 rounded-2xl animate-fadeIn">
-          <div className="flex items-center justify-between border-b border-slate-200/50 dark:border-slate-800 pb-2">
-            <span className="text-xs font-semibold text-slate-500">New Exam Countdown</span>
+        <form onSubmit={handleAddExam} className="mt-4 space-y-4 p-4 bg-background dark:bg-surface-dark-elevated border border-border dark:border-border-dark rounded-xl">
+          <div className="flex items-center justify-between border-b border-border dark:border-border-dark pb-2">
+            <span className="text-xs font-semibold text-foreground-muted dark:text-slate-400">New Exam Countdown</span>
             <button 
               type="button" 
               onClick={() => setShowForm(false)} 
-              className="text-slate-400 hover:text-slate-650 dark:hover:text-white"
+              className="text-foreground-muted hover:text-foreground dark:hover:text-white"
             >
               <FiX className="h-4 w-4" />
             </button>
@@ -254,36 +254,36 @@ function ExamCountdownWidget() {
           <div className="space-y-3">
             {/* Input Name */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Exam / Course Name</label>
+              <label className="block text-[11px] font-semibold text-foreground-muted dark:text-slate-400 mb-1">Exam / Course Name</label>
               <input 
                 type="text" 
                 placeholder="e.g., Chemistry Midterm" 
                 value={newExam.name} 
                 onChange={(e) => setNewExam({ ...newExam, name: e.target.value })} 
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-accent text-slate-850 dark:text-white"
+                className="w-full rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary text-foreground dark:text-white"
               />
             </div>
 
             {/* Input Date (Typable Date Picker) */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Exam Date (YYYY-MM-DD)</label>
+              <label className="block text-[11px] font-semibold text-foreground-muted dark:text-slate-400 mb-1">Exam Date (YYYY-MM-DD)</label>
               <input 
                 type="date" 
                 value={newExam.date} 
                 onChange={(e) => setNewExam({ ...newExam, date: e.target.value })} 
-                className="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-accent text-slate-850 dark:text-white"
+                className="w-full rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary text-foreground dark:text-white"
               />
             </div>
 
             {/* Input Time (Clock Dropdown Selectors) */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-1">Exam Time (Clock Dropdowns)</label>
+              <label className="block text-[11px] font-semibold text-foreground-muted dark:text-slate-400 mb-1">Exam Time</label>
               <div className="grid grid-cols-3 gap-2">
                 {/* Hours Select */}
                 <select
                   value={newExam.hour}
                   onChange={(e) => setNewExam({ ...newExam, hour: e.target.value })}
-                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-accent text-slate-850 dark:text-white cursor-pointer"
+                  className="rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary text-foreground dark:text-white cursor-pointer"
                 >
                   {Array.from({ length: 12 }, (_, i) => i + 1).map((h) => {
                     const val = h.toString().padStart(2, '0');
@@ -295,7 +295,7 @@ function ExamCountdownWidget() {
                 <select
                   value={newExam.minute}
                   onChange={(e) => setNewExam({ ...newExam, minute: e.target.value })}
-                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-accent text-slate-850 dark:text-white cursor-pointer"
+                  className="rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary text-foreground dark:text-white cursor-pointer"
                 >
                   {Array.from({ length: 60 }, (_, i) => i).map((m) => {
                     const val = m.toString().padStart(2, '0');
@@ -307,7 +307,7 @@ function ExamCountdownWidget() {
                 <select
                   value={newExam.period}
                   onChange={(e) => setNewExam({ ...newExam, period: e.target.value })}
-                  className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-accent text-slate-850 dark:text-white cursor-pointer"
+                  className="rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated px-3 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary text-foreground dark:text-white cursor-pointer"
                 >
                   <option value="AM">AM</option>
                   <option value="PM">PM</option>
@@ -317,16 +317,16 @@ function ExamCountdownWidget() {
 
             {/* Color Dot selection */}
             <div>
-              <label className="block text-[11px] font-semibold text-slate-400 mb-2">Category Color Tag</label>
+              <label className="block text-[11px] font-semibold text-foreground-muted dark:text-slate-400 mb-2">Category Color Tag</label>
               <div className="flex items-center gap-2">
                 {COLORS.map((color) => (
                   <button
                     key={color.value}
                     type="button"
                     onClick={() => setNewExam({ ...newExam, color: color.value })}
-                    className={`h-6 w-6 rounded-full transition-transform active:scale-90 relative ${
+                    className={`h-6 w-6 rounded-full transition-all duration-150 active:scale-90 relative ${
                       newExam.color === color.value 
-                        ? 'ring-2 ring-slate-800 dark:ring-white scale-110 shadow-sm' 
+                        ? 'ring-2 ring-primary dark:ring-secondary scale-110 shadow-sm' 
                         : 'hover:scale-105'
                     }`}
                     style={{ backgroundColor: color.value }}
@@ -345,13 +345,13 @@ function ExamCountdownWidget() {
             <button 
               type="button" 
               onClick={() => setShowForm(false)} 
-              className="rounded-xl border border-slate-200 dark:border-slate-800 py-2 text-xs font-semibold text-slate-700 dark:text-slate-350 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+              className="rounded-full border border-border dark:border-border-dark py-2 text-xs font-semibold text-foreground dark:text-slate-300 hover:bg-background dark:hover:bg-surface-dark-elevated transition duration-200"
             >
               Cancel
             </button>
             <button 
               type="submit" 
-              className="rounded-xl bg-primary hover:bg-secondary py-2 text-xs font-semibold text-white transition shadow-sm"
+              className="rounded-full bg-primary hover:bg-primary-hover py-2 text-xs font-semibold text-white transition duration-200 shadow-glow"
             >
               Save Countdown
             </button>

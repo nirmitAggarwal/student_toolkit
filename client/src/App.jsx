@@ -48,7 +48,7 @@ function App() {
   return (
     <ThemeProvider>
       <>
-        <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+        <div className="min-h-screen bg-background dark:bg-background-dark text-foreground dark:text-slate-100 transition-colors duration-300">
           <div className="flex min-h-screen">
             <Sidebar />
             <div className="flex-1">

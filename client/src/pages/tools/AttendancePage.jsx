@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiPlus, FiTrash2 } from 'react-icons/fi';
+import { FiPlus } from 'react-icons/fi';
 
 function AttendanceTrackerPage() {
   const [records, setRecords] = useState([
@@ -44,22 +44,22 @@ function AttendanceTrackerPage() {
 
   return (
     <section className="space-y-8">
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h1 className="text-3xl font-semibold text-slate-900">Attendance Tracker</h1>
-        <p className="mt-2 text-slate-600">Track attendance and manage skip days</p>
+      <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 shadow-card transition-colors duration-300">
+        <h1 className="text-3xl font-serif font-bold text-foreground dark:text-white">Attendance Tracker</h1>
+        <p className="mt-2 text-sm text-foreground-muted dark:text-slate-400">Track attendance and manage skip days</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card transition-colors duration-300">
           <div className="space-y-4">
             {records.map((record, idx) => (
-              <div key={idx} className="rounded-2xl border border-slate-200 p-4 space-y-3">
+              <div key={idx} className="rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated p-4 space-y-3 transition-colors duration-300">
                 <input
                   type="text"
                   placeholder="Subject name"
                   value={record.subject}
                   onChange={(e) => handleChange(idx, 'subject', e.target.value)}
-                  className="w-full rounded-2xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-primary"
+                  className="w-full rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated text-foreground dark:text-white px-3.5 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary transition-all"
                 />
                 <div className="grid grid-cols-3 gap-3">
                   <input
@@ -67,21 +67,21 @@ function AttendanceTrackerPage() {
                     placeholder="Attended"
                     value={record.attended}
                     onChange={(e) => handleChange(idx, 'attended', e.target.value)}
-                    className="rounded-2xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-primary"
+                    className="rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated text-foreground dark:text-white px-3.5 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary transition-all"
                   />
                   <input
                     type="number"
                     placeholder="Total"
                     value={record.total}
                     onChange={(e) => handleChange(idx, 'total', e.target.value)}
-                    className="rounded-2xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-primary"
+                    className="rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated text-foreground dark:text-white px-3.5 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary transition-all"
                   />
                   <input
                     type="number"
                     placeholder="Required %"
                     value={record.required}
                     onChange={(e) => handleChange(idx, 'required', e.target.value)}
-                    className="rounded-2xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-primary"
+                    className="rounded-xl border border-border dark:border-border-dark bg-white dark:bg-surface-dark-elevated text-foreground dark:text-white px-3.5 py-2 text-sm outline-none focus:border-primary dark:focus:border-secondary transition-all"
                   />
                 </div>
               </div>
@@ -89,27 +89,27 @@ function AttendanceTrackerPage() {
           </div>
           <button
             onClick={handleAddRecord}
-            className="mt-4 flex items-center gap-2 rounded-full bg-secondary px-6 py-2 text-sm font-semibold text-white hover:bg-primary"
+            className="mt-4 flex items-center gap-2 rounded-full bg-secondary hover:bg-secondary-hover px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 shadow-sm"
           >
             <FiPlus className="h-4 w-4" />
             Add Subject
           </button>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
-          <div className="text-center rounded-2xl bg-gradient-to-br from-primary to-secondary p-6 text-white">
-            <p className="text-sm opacity-80">Current %</p>
-            <p className="mt-2 text-4xl font-bold">{metrics.percentage}%</p>
+        <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card space-y-6 transition-colors duration-300">
+          <div className="text-center rounded-xl bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-glow">
+            <p className="text-sm opacity-80 font-medium">Current %</p>
+            <p className="mt-2 text-4xl font-serif font-bold">{metrics.percentage}%</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl bg-green-50 p-4 text-center">
-              <p className="text-xs text-slate-500">Can skip</p>
-              <p className="mt-2 text-2xl font-bold text-green-600">{metrics.canSkip}</p>
+            <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/30 p-4 text-center">
+              <p className="text-xs text-emerald-700 dark:text-emerald-450 font-semibold">Can skip</p>
+              <p className="mt-2 text-3xl font-serif font-bold text-emerald-600 dark:text-emerald-400">{metrics.canSkip}</p>
             </div>
-            <div className="rounded-2xl bg-red-50 p-4 text-center">
-              <p className="text-xs text-slate-500">Must attend</p>
-              <p className="mt-2 text-2xl font-bold text-red-600">{metrics.mustAttend}</p>
+            <div className="rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/30 p-4 text-center">
+              <p className="text-xs text-red-750 dark:text-red-400 font-semibold">Must attend</p>
+              <p className="mt-2 text-3xl font-serif font-bold text-red-600 dark:text-red-400">{metrics.mustAttend}</p>
             </div>
           </div>
         </div>

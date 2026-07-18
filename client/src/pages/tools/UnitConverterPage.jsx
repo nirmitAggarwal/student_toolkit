@@ -53,7 +53,6 @@ function UnitConverterPage() {
     } else {
       const units = Object.keys(converter.units);
       units.forEach((unit) => {
-        // Convert to base unit first, then to target unit
         const baseUnitValue = baseValue * converter.units[fromUnit];
         conversions[unit] = baseUnitValue / converter.units[unit];
       });
@@ -67,15 +66,15 @@ function UnitConverterPage() {
   const unitKeys = Object.keys(converter.units);
 
   return (
-    <section className="space-y-8 text-slate-800 dark:text-slate-100">
-      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-8 shadow-sm">
-        <h1 className="text-3xl font-semibold text-slate-900 dark:text-white">Unit Converter</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-400">Convert between various units of measurement (Length, Weight, Data, Temp, Volume)</p>
+    <section className="space-y-8 text-foreground dark:text-slate-100">
+      <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 shadow-card transition-colors duration-300">
+        <h1 className="text-3xl font-serif font-bold text-foreground dark:text-white">Unit Converter</h1>
+        <p className="mt-2 text-sm text-foreground-muted dark:text-slate-400">Convert between various units of measurement (Length, Weight, Data, Temp, Volume)</p>
       </div>
 
-      <div className="max-w-3xl rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-sm">
+      <div className="max-w-3xl rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-6 shadow-card transition-colors duration-300">
         {/* Tab Selection */}
-        <div className="flex gap-1 border-b border-slate-100 dark:border-slate-800 mb-6 flex-wrap">
+        <div className="flex gap-1 border-b border-border dark:border-border-dark mb-6 flex-wrap">
           {Object.entries(converters).map(([key, conv]) => {
             const nextKeys = Object.keys(conv.units);
             return (
@@ -87,10 +86,10 @@ function UnitConverterPage() {
                   setFromUnit(nextKeys[0]);
                   setToUnit(nextKeys[1] || nextKeys[0]);
                 }}
-                className={`px-5 py-3 font-semibold border-b-2 -mb-px transition ${
+                className={`px-5 py-3 font-semibold border-b-2 -mb-px transition-all duration-200 ${
                   activeTab === key
-                    ? 'border-primary text-primary font-bold'
-                    : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white'
+                    ? 'border-primary text-primary font-bold dark:border-secondary dark:text-secondary'
+                    : 'border-transparent text-foreground-muted hover:text-foreground dark:hover:text-white'
                 }`}
               >
                 {conv.label}
@@ -102,19 +101,19 @@ function UnitConverterPage() {
         {/* Conversion Inputs */}
         <div className="grid gap-4 sm:grid-cols-2 mb-6">
           <div>
-            <label className="block text-sm font-semibold text-slate-750 dark:text-slate-300 mb-2">From</label>
+            <label className="block text-sm font-semibold text-foreground dark:text-slate-350 mb-2">From</label>
             <div className="flex gap-2">
               <input
                 type="number"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="Enter value"
-                className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+                className="flex-1 rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated text-foreground dark:text-white px-4 py-2.5 outline-none focus:border-primary dark:focus:border-secondary transition-all text-sm"
               />
               <select
                 value={fromUnit}
                 onChange={(e) => setFromUnit(e.target.value)}
-                className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-3 py-3 outline-none focus:border-primary transition"
+                className="rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated text-foreground dark:text-white px-3 py-2.5 outline-none focus:border-primary dark:focus:border-secondary transition-all cursor-pointer text-sm"
               >
                 {unitKeys.map((unit) => (
                   <option key={unit} value={unit}>{unit}</option>
@@ -124,11 +123,11 @@ function UnitConverterPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-slate-750 dark:text-slate-300 mb-2">To</label>
+            <label className="block text-sm font-semibold text-foreground dark:text-slate-350 mb-2">To</label>
             <select
               value={toUnit}
               onChange={(e) => setToUnit(e.target.value)}
-              className="w-full rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white px-4 py-3 outline-none focus:border-primary transition"
+              className="w-full rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated text-foreground dark:text-white px-4 py-2.5 outline-none focus:border-primary dark:focus:border-secondary transition-all cursor-pointer text-sm"
             >
               {unitKeys.map((unit) => (
                 <option key={unit} value={unit}>{unit}</option>
@@ -138,22 +137,22 @@ function UnitConverterPage() {
         </div>
 
         {/* Display Conversion Result */}
-        <div className="rounded-2xl bg-gradient-to-br from-primary to-secondary p-6 text-white text-center shadow-md">
+        <div className="rounded-xl bg-gradient-to-br from-primary to-primary-dark p-6 text-white text-center shadow-glow">
           <p className="text-sm opacity-80">{value || '0'} {fromUnit} = </p>
-          <p className="mt-2 text-3xl font-bold">{conversions[toUnit]?.toFixed(4) || '0'} {toUnit}</p>
+          <p className="mt-2 text-3xl font-serif font-bold">{conversions[toUnit]?.toFixed(4) || '0'} {toUnit}</p>
         </div>
 
         {/* Side-by-side all other conversions */}
-        <div className="mt-8 border-t border-slate-100 dark:border-slate-800 pt-6">
-          <h3 className="font-semibold text-slate-900 dark:text-white mb-4">All Conversions (Reference)</h3>
+        <div className="mt-8 border-t border-border dark:border-border-dark pt-6">
+          <h3 className="font-serif font-semibold text-foreground dark:text-white mb-4">All Conversions (Reference)</h3>
           <div className="grid gap-3 grid-cols-2 sm:grid-cols-3">
             {unitKeys.map((unit) => (
               <div
                 key={unit}
-                className="rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-950/40 p-4"
+                className="rounded-xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated p-4"
               >
-                <p className="text-xs text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">{unit}</p>
-                <p className="mt-1.5 font-mono font-bold text-slate-850 dark:text-slate-200 text-lg">
+                <p className="text-xs text-foreground-muted font-bold uppercase tracking-wider">{unit}</p>
+                <p className="mt-1.5 font-mono font-bold text-foreground dark:text-slate-200 text-lg">
                   {conversions[unit] >= 1000000 || (conversions[unit] > 0 && conversions[unit] < 0.0001)
                     ? conversions[unit].toExponential(4)
                     : conversions[unit]?.toFixed(4) || '0'}

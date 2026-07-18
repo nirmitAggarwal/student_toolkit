@@ -12,20 +12,20 @@ function DashboardPage() {
   return (
     <section className="space-y-8">
       <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 shadow-card transition-colors duration-300">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm uppercase tracking-[0.2em] text-slate-500">Welcome back</p>
-              <h1 className="mt-3 text-3xl font-semibold text-slate-900">{user?.name || 'Scholar'}</h1>
-              <p className="mt-2 text-sm text-slate-500">Keep track of your academic goals</p>
+              <p className="text-sm uppercase tracking-[0.2em] text-foreground-muted dark:text-slate-500">Welcome back</p>
+              <h1 className="mt-3 text-3xl font-serif font-bold text-foreground dark:text-white">{user?.name || 'Scholar'}</h1>
+              <p className="mt-2 text-sm text-foreground-muted dark:text-slate-400">Keep track of your academic goals</p>
             </div>
-            <div className="rounded-3xl bg-primary px-4 py-3 text-white shadow-glow text-sm font-semibold">{today}</div>
+            <div className="rounded-full bg-primary px-5 py-2.5 text-white shadow-glow text-sm font-semibold">{today}</div>
           </div>
         </div>
 
-        <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-primary to-secondary p-6 shadow-sm text-white">
+        <div className="rounded-2xl border border-primary/20 dark:border-secondary/20 bg-gradient-to-br from-primary to-primary-dark p-6 shadow-glow text-white transition-colors duration-300">
           <p className="text-sm opacity-80">Your Focus</p>
-          <p className="mt-3 text-3xl font-bold">Make today count</p>
+          <p className="mt-3 text-3xl font-serif font-bold">Make today count</p>
           <p className="mt-2 text-sm opacity-70">Stay organized, ace your exams</p>
         </div>
       </div>
@@ -37,24 +37,24 @@ function DashboardPage() {
       </div>
 
       <div>
-        <h2 className="text-2xl font-semibold text-slate-900 mb-4">This Week's Focus</h2>
+        <h2 className="text-2xl font-serif font-semibold text-foreground dark:text-white mb-4">This Week's Focus</h2>
         <DashboardTimeTableWidget />
       </div>
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
-        <h2 className="text-2xl font-semibold text-slate-900 mb-6">Quick Actions</h2>
+      <div className="rounded-2xl border border-border dark:border-border-dark bg-surface dark:bg-surface-dark p-8 shadow-card transition-colors duration-300">
+        <h2 className="text-2xl font-serif font-semibold text-foreground dark:text-white mb-6">Quick Actions</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <a href="/tools/cgpa" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center hover:shadow-glow hover:border-primary transition">
+          <a href="/tools/cgpa" className="group rounded-2xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated p-6 text-center transition-all duration-200 hover:shadow-card-hover hover:border-primary dark:hover:border-secondary hover:-translate-y-1">
             <p className="text-3xl">📊</p>
-            <p className="mt-3 font-semibold text-slate-900">Track CGPA</p>
+            <p className="mt-3 font-serif font-semibold text-foreground dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors">Track CGPA</p>
           </a>
-          <a href="/tools/attendance" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center hover:shadow-glow hover:border-primary transition">
+          <a href="/tools/attendance" className="group rounded-2xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated p-6 text-center transition-all duration-200 hover:shadow-card-hover hover:border-primary dark:hover:border-secondary hover:-translate-y-1">
             <p className="text-3xl">✅</p>
-            <p className="mt-3 font-semibold text-slate-900">Attendance</p>
+            <p className="mt-3 font-serif font-semibold text-foreground dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors">Attendance</p>
           </a>
-          <a href="/tools/pdf" className="rounded-2xl border border-slate-200 bg-slate-50 p-6 text-center hover:shadow-glow hover:border-primary transition">
+          <a href="/tools/pdf" className="group rounded-2xl border border-border dark:border-border-dark bg-background dark:bg-surface-dark-elevated p-6 text-center transition-all duration-200 hover:shadow-card-hover hover:border-primary dark:hover:border-secondary hover:-translate-y-1">
             <p className="text-3xl">📄</p>
-            <p className="mt-3 font-semibold text-slate-900">Merge PDFs</p>
+            <p className="mt-3 font-serif font-semibold text-foreground dark:text-white group-hover:text-primary dark:group-hover:text-secondary transition-colors">Merge PDFs</p>
           </a>
         </div>
       </div>
