@@ -1,21 +1,23 @@
-import User from '../models/User.js';
-import mongoose from 'mongoose';
+import User from "../models/User.js";
+import mongoose from "mongoose";
 
 export const getUserProfile = async (req, res) => {
   try {
     // Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
-      return res.status(401).json({ message: 'Invalid session. Please log in again.' });
+      return res
+        .status(401)
+        .json({ message: "Invalid session. Please log in again." });
     }
 
     const user = await User.findById(req.user.id);
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     res.json(user);
   } catch (error) {
-    console.error('Get profile error:', error);
-    res.status(500).json({ message: 'Failed to fetch user profile' });
+    console.error("Get profile error:", error);
+    res.status(500).json({ message: "Failed to fetch user profile" });
   }
 };
 
@@ -23,7 +25,9 @@ export const updateUserProfile = async (req, res) => {
   try {
     // Validate ObjectId format
     if (!mongoose.Types.ObjectId.isValid(req.user.id)) {
-      return res.status(401).json({ message: 'Invalid session. Please log in again.' });
+      return res
+        .status(401)
+        .json({ message: "Invalid session. Please log in again." });
     }
 
     const { name, college, branch, semester, rollNumber, theme } = req.body;
@@ -38,37 +42,47 @@ export const updateUserProfile = async (req, res) => {
         rollNumber: rollNumber || undefined,
         theme: theme || undefined,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
 
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    res.json({ message: 'Profile updated successfully', user });
+    res.json({ message: "Profile updated successfully", user });
   } catch (error) {
-    console.error('Profile update error:', error);
-    res.status(400).json({ message: 'Failed to update profile' });
+    console.error("Profile update error:", error);
+    res.status(400).json({ message: "Failed to update profile" });
   }
 };
 
 export const createUserIfNotExists = async (githubUser) => {
   try {
-    let user = await User.findOne({ githubId: githubUser.id });
+    console.log("GitHub user:", githubUser);
+
+    let user = await User.findOne({
+      githubId: githubUser.id.toString(),
+    });
+
+    console.log("Existing user:", user);
 
     if (!user) {
+      console.log("Creating new user...");
+
       user = await User.create({
-        githubId: githubUser.id,
+        githubId: githubUser.id.toString(),
         email: githubUser.email || `github_${githubUser.id}@example.com`,
         name: githubUser.name || githubUser.login,
         avatar: githubUser.avatar_url,
         bio: githubUser.bio,
       });
+
+      console.log("Created:", user);
     }
 
     return user;
-  } catch (error) {
-    console.error('Create user error:', error);
+  } catch (err) {
+    console.error(err);
     return null;
   }
 };

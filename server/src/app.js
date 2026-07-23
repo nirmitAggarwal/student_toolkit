@@ -1,5 +1,4 @@
 import dotenv from 'dotenv';
-dotenv.config({ path: ".env.example" });
 import express from 'express';
 import cors from 'cors';
 import connectDatabase from './config/database.js';
@@ -9,6 +8,7 @@ import errorHandler from './middleware/errorHandler.js';
 import holidayRoutes from "./routes/holidayRoutes.js";
 import academicRouter from "./routes/academicRouter.js";
 import calendarRoutes from "./routes/calendarRoutes.js";
+dotenv.config({});
 
 
 const app = express();

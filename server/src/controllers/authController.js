@@ -37,6 +37,7 @@ export const githubCallback = async (req, res) => {
     }
 
     const tokenData = await tokenResponse.json();
+    console.log(tokenData);
 
     if (tokenData.error) {
       console.error('GitHub token error:', tokenData.error_description);
@@ -62,10 +63,32 @@ export const githubCallback = async (req, res) => {
     }
 
     const githubUser = await userResponse.json();
+    console.log(githubUser);
 
     if (githubUser.error) {
       return res.status(400).json({ message: 'Failed to fetch GitHub user data' });
     }
+
+    // Fetch user's emails from GitHub API to get verified email
+    const emailsResponse = await fetch('https://api.github.com/user/emails', {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+        Accept: 'application/vnd.github.v3+json',
+      },
+    });
+
+    let primaryEmail = githubUser.email;
+    if (emailsResponse.ok) {
+      const emails = await emailsResponse.json();
+      console.log('GitHub emails:', emails);
+      const primaryVerifiedEmail = emails.find(e => e.primary && e.verified);
+      if (primaryVerifiedEmail) {
+        primaryEmail = primaryVerifiedEmail.email;
+      }
+    }
+
+    // Attach the primary email to githubUser
+    githubUser.email = primaryEmail;
 
     // Create or get user in MongoDB
     const user = await createUserIfNotExists(githubUser);
