@@ -1,14 +1,17 @@
-import { Navigate } from 'react-router-dom';
-import { useAuthStore } from '../../store/useAuthStore';
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuthStore } from "../../store/useAuthStore";
 
-function ProtectedRoute({ children }) {
-  const { isAuthenticated } = useAuthStore();
+export default function ProtectedRoute() {
+  const { isAuthenticated, isLoading } = useAuthStore();
+
+  if (isLoading) {
+    return null;
+    // or your loading screen
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return <Outlet />;
 }
-
-export default ProtectedRoute;

@@ -26,78 +26,46 @@ import PDFMergerPage from './pages/tools/PDFMergerPage.jsx';
 import CalendarPage from "./pages/tools/CalendarPage.jsx";
 
 function App() {
-  const { isAuthenticated, restoreSession } = useAuthStore();
+  const { restoreSession, isLoading } = useAuthStore();
 
   useEffect(() => {
     restoreSession();
-  }, [restoreSession]);
+  }, []);
 
-  if (!isAuthenticated) {
-    return (
-      <>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth/github/callback" element={<GitHubCallbackPage />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
-        </Routes>
-        <Toaster position="top-center" />
-      </>
-    );
+  if (isLoading) {
+    return null;
   }
 
   return (
     <ThemeProvider>
-      <>
-        <div className="min-h-screen bg-background dark:bg-background-dark text-foreground dark:text-slate-100 transition-colors duration-300">
-          <div className="flex min-h-screen">
-            <Sidebar />
-            <div className="flex-1">
-              <Topbar />
-              <main className="px-6 py-6 sm:px-10">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={window.location.pathname}
-                    initial={{ opacity: 0, y: 12 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -12 }}
-                    transition={{ duration: 0.24 }}
-                  >
-                    <Routes>
-                      <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                      <Route
-                        path="/dashboard"
-                        element={
-                          <ProtectedRoute>
-                            <DashboardPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route path="/tools" element={<ToolsPage />} />
-                      <Route path="/settings" element={<SettingsPage />} />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/auth/github/callback" element={<GitHubCallbackPage />} />
 
-                      {/* Tool Routes */}
-                      <Route path="/calendar" element={<CalendarPage />} />
-                      <Route path="/tools/cgpa" element={<CGPAPage />} />
-                      <Route path="/tools/sgpa" element={<SGPAPage />} />
-                      <Route path="/tools/percentage" element={<PercentagePage />} />
-                      <Route path="/tools/image" element={<ImageCompressorPage />} />
-                      <Route path="/tools/attendance" element={<AttendancePage />} />
-                      <Route path="/tools/timetable" element={<TimeTablePage />} />
-                      <Route path="/tools/qr-gen" element={<QRGeneratorPage />} />
-                      <Route path="/tools/qr-scan" element={<QRScannerPage />} />
-                      <Route path="/tools/converter" element={<UnitConverterPage />} />
-                      <Route path="/tools/pdf" element={<PDFMergerPage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-                      <Route path="*" element={<NotFoundPage />} />
-                    </Routes>
-                  </motion.div>
-                </AnimatePresence>
-              </main>
-            </div>
-          </div>
-        </div>
-        <Toaster position="top-center" />
-      </>
+          <Route path="/dashboard" element={<DashboardPage />} />
+
+          <Route path="/tools" element={<ToolsPage />} />
+
+          <Route path="/tools/cgpa" element={<CGPAPage />} />
+
+          <Route path="/tools/sgpa" element={<SGPAPage />} />
+
+          <Route path="/tools/attendance" element={<AttendancePage />} />
+
+          <Route path="/tools/image" element={<ImageCompressorPage />} />
+
+          <Route path="/tools/pdf" element={<PDFMergerPage />} />
+
+          {/* etc */}
+        </Route>
+
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+
+      <Toaster position="top-center" />
     </ThemeProvider>
   );
 }
