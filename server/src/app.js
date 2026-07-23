@@ -27,6 +27,11 @@ app.get('/', (req, res) => {
   res.json({ message: 'Student Toolkit API is running' });
 });
 
+app.post('/wakey-wakey-mf', (req, res) => {
+  console.log(req.body);
+  res.send('Awake Bro.');
+});
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
