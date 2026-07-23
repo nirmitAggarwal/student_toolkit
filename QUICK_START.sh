@@ -92,7 +92,6 @@ echo ""
 
 echo "📚 Useful Links"
 echo "==============="
-echo "Google Console:        https://console.cloud.google.com"
 echo "GitHub Settings:       https://github.com/settings/developers"
 echo "MongoDB Atlas:        https://www.mongodb.com/cloud/atlas"
 echo "React Docs:            https://react.dev"
